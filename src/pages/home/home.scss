@@ -1,0 +1,51 @@
+page-home {
+	#homeTop .col {
+		padding: 1em;
+	    text-align: center;
+	}
+
+	#homeHeader button {
+        font-size: 1.5em;
+    }
+
+	.success {
+        color: #32db64;
+    }
+
+    .danger {
+        color: #f53d3d;
+    }
+
+    .ngx-pagination {
+    	text-align: center;
+    }
+
+    .ngx-pagination .current {
+    	background: #3d4db8;
+    }
+
+    #txTable .row {
+    	border-bottom: 1px solid #eee;
+    	padding: 5px 0;
+    }
+
+	@media(max-width: 575px){
+        #homeHeader .toolbar-title-md{
+            font-size: 1em;
+        }
+
+        .hidden-xs {
+            display:none;
+        }
+
+        .no-top-bottom-padding {
+            padding: 0 5px;
+        }
+        
+    }
+    @media(min-width: 576px){
+        .show-xs {
+            display:none;
+        }
+    }
+}

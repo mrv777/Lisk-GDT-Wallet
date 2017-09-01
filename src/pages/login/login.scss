@@ -1,0 +1,31 @@
+page-login {
+	#qrIcon, #fingerIcon {
+        font-size: 2em;
+        margin: 0;
+        padding: 0 0.4em;
+        height: 100%;
+    }
+
+    #loginLogo {
+        background: #3d4db8;
+        text-align: center;
+        margin: -16px -16px 2px -16px;
+        padding: 2em;
+    }
+
+    #savePasswordBox .item-inner {
+        border: none;
+    }
+
+    @media(max-width: 1023px){
+        #headerLogo {
+            width: 192px;
+        }
+        
+    }
+    @media(min-width: 1024px){
+        #headerLogo {
+            width: 256px;
+        }
+    }
+}

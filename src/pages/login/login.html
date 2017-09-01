@@ -1,0 +1,53 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content padding>
+	<div id="loginLogo">
+		<img id="headerLogo" src="assets/headerLogo.png" />
+	</div>
+	<form [formGroup]="loginForm">
+		<ion-list>
+			<ion-item>
+				<ion-label stacked color="primary">Password</ion-label>
+				<ion-icon name="lock"></ion-icon>
+				<ion-input [(ngModel)]="password" name="password" type="password" required formControlName="passwordForm" placeholder="Password">
+				</ion-input>
+				
+				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
+				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
+				
+			</ion-item>
+			<ion-item *ngIf="fingerAvailable === true" id="savePasswordBox">
+				<ion-label>Save to Fingerprint</ion-label>
+    		<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked color="primary">Node</ion-label>
+				<ion-select id="nodeSelect" [(ngModel)]="nodeSelect" (ionChange)='changeNode()'  formControlName="nodeSelectForm">
+					<ion-option value="mainnet/">Mainnet (Default)</ion-option>
+					<ion-option value="testnet/">Testnet (For Testing)</ion-option>
+					<ion-option value="">Custom (Advanced)</ion-option>
+				</ion-select>
+			</ion-item>
+			<ion-item [class.hide]="hideCustom">
+				<ion-input [(ngModel)]="node" name="node" type="text" formControlName="nodeForm" placeholder="URL:PORT of the custom node">
+				</ion-input>
+			</ion-item>
+		</ion-list>
+		{{message}}
+		<ion-row responsive-sm>
+			<ion-col>
+				<button ion-button color="secondary" (click)="onLogin()" type="submit" block [disabled]="!loginForm.valid || disableLogin">Login</button>
+			</ion-col>
+		</ion-row>
+		<ion-row responsive-sm>
+			<ion-col>
+				<button ion-button (click)="openModal()" block >Create New Account</button>
+			</ion-col>
+		</ion-row>
+	</form>
+
+</ion-content>

@@ -1,0 +1,56 @@
+<!--
+  Generated template for the SendModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Send Lisk</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <form [formGroup]="sendForm">
+	<ion-list *ngIf="status != 1">
+		<ion-item>
+			<ion-label stacked color="primary">Recipient</ion-label>
+			<ion-input [(ngModel)]="recipient" [disabled]="disableSend" name="recipient" type="text" formControlName="recipientForm" (ngModelChange)="recipient = recipient.toUpperCase()">
+   			</ion-input>
+   			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
+		</ion-item>
+		<ion-item>
+			<ion-label stacked color="primary">Amount</ion-label>
+			<ion-input [(ngModel)]="amount" [disabled]="disableSend" name="amount" type="number" formControlName="amountForm">
+			</ion-input>
+		</ion-item>
+		<ion-item *ngIf="accountHasSecondPass">
+			<ion-label stacked color="primary">Second Passphrase</ion-label>
+			<ion-input [(ngModel)]="secondPass" [disabled]="disableSend" name="secondPass" type="password" formControlName="secondForm">
+			</ion-input>
+			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword()"> <ion-icon name="barcode"> </ion-icon> </button>
+		</ion-item>
+    </ion-list>
+    <ion-row responsive-sm>
+      <ion-col [ngClass]="{'successBox' : (status == 1), 'failedBox':(status == -1)}">
+        {{resultTxt}}
+      </ion-col>
+    </ion-row>
+
+	<ion-row responsive-sm>
+		<ion-col>
+			<button ion-button [disabled]="disableSend || !sendForm.valid" (click)="onSend()" type="submit" block>Send</button>
+		</ion-col>
+    </ion-row>
+    <ion-row responsive-sm>
+      <ion-col>
+				<button ion-button color="light" (click)="closeModal()" block>Close</button>
+			</ion-col>
+		</ion-row>
+	</form>
+
+</ion-content>

@@ -1,0 +1,29 @@
+<!--
+  Generated template for the NewAccountPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>New Account</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <h6>Account:</h6> <h4>{{accountID}}</h4>
+  <h6>Password:</h6> <h4>{{passphrase}}</h4>
+  <ngx-qrcode qrc-errorCorrectionLevel = "M" [qrc-value] = "accountID"></ngx-qrcode>
+  <ion-row responsive-sm>
+    <ion-col>
+      <button ion-button color="secondary" (click)="save()" block>Download</button>
+    </ion-col>
+    <ion-col>
+      <button ion-button color="light" (click)="closeModal()" [disabled]="!saved" block>Close</button>
+    </ion-col>
+  </ion-row>
+</ion-content>
+

@@ -1,0 +1,124 @@
+<ion-header id="homeHeader">
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Lisk GDT Wallet</ion-title>
+    <ion-buttons end>
+      <button ion-button secondary (click)="openModal('send')">
+        <ion-icon name="send"></ion-icon>
+      </button>
+      <button ion-button secondary (click)="openModal('receive')"> 
+        <ion-icon name="barcode"> </ion-icon> 
+      </button>
+      <button ion-button secondary (click)="logout()">
+        <ion-icon name="power"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid id="homeTop" *ngIf="account != null">
+    <ion-row>
+      <ion-col col-12 col-sm-5>
+        <h5>Address</h5>
+        <h4>{{accountID}}</h4>
+      </ion-col>
+      <ion-col col-12 col-sm-2 class="hidden-xs">
+      </ion-col>
+      <ion-col col-12 col-sm-5>
+        <h5>Balance</h5>
+        <h4 *ngIf="account.account != null">{{account.account.balance/100000000 | number : '1.0-8'}}LSK</h4>
+        <h4 *ngIf="account.account == null">0LSK</h4>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid id="txTable">
+    <ion-row class="hidden-xs">
+      <ion-col col-2>
+        <h4>Time</h4>
+      </ion-col>
+      <ion-col col-3>
+        <h4>Transaction ID</h4>
+      </ion-col>
+      <ion-col col-3>
+        <h4>From / To</h4>
+      </ion-col>
+      <ion-col col-2>
+        <h4>Amount</h4>
+      </ion-col>
+      <ion-col col-2>
+        <h4>Fee</h4>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transactions == null">
+      <ion-col col-12 col-sm-2>
+        <h5>Loading Transactions</h5>
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transactions != null && transactions.length == 0">
+      <ion-col col-12 col-sm-2>
+        <h5>No Transactions</h5>
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let transaction of transactions | paginate: { id: 'txList',
+                                                      itemsPerPage: numToDisplay,
+                                                      currentPage: p,
+                                                      totalItems: total }">
+      <ion-col col-12 col-sm-2>
+        <span class="show-xs"><b>Time:</b></span> {{transaction.date | date:'short'}}
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+        <span class="show-xs"><b>ID:</b></span> {{transaction.id}}
+      </ion-col>
+      <ion-col col-12 col-sm-3 *ngIf="transaction.recipientId != accountID && transaction.type == 0">
+        <span class="show-xs"><b>To:</b></span> {{transaction.recipientId}}
+      </ion-col>
+      <ion-col col-12 col-sm-3 *ngIf="transaction.senderId != accountID  && transaction.type == 0">
+        <span class="show-xs"><b>From:</b></span> {{transaction.senderId}}
+      </ion-col>
+      <ion-col col-12 col-sm-3 *ngIf="transaction.type != 0">
+        <span class="show-xs"><b>Type:</b></span> 
+        <span *ngIf="transaction.type == 1">Second Passphrase</span>
+        <span *ngIf="transaction.type == 2">Delegate Registration</span>
+        <span *ngIf="transaction.type == 3">Delegate Vote</span>
+        <span *ngIf="transaction.type != 3 && transaction.type != 2 && transaction.type != 1">{{transaction.type}}</span>
+      </ion-col>
+      <ion-col col-12 col-sm-2 [ngClass]="{'danger' : (transaction.senderId == accountID && transaction.amount > 0), 'success':(transaction.recipientId == accountID && transaction.amount > 0)}">
+        <span class="show-xs"><b>Amount:</b></span> {{transaction.amount/100000000 | number : '1.0-8'}}
+      </ion-col>
+      <ion-col col-12 col-sm-2 [ngClass]="{'danger' : (transaction.senderId == accountID)}">
+        <span class="show-xs"><b>Fee:</b> </span>{{transaction.fee/100000000 | number : '1.0-8'}}
+      </ion-col>
+    </ion-row>
+    <pagination-controls  id="txList"
+                      (pageChange)="pageChanged($event)"
+                      maxSize="7"
+                      directionLinks="true"
+                      autoHide="true"
+                      previousLabel="Back"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+  </ion-grid>
+</ion-content>

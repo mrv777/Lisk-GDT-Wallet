@@ -1,0 +1,88 @@
+<ion-header id="votingHeader">
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Voting Page</ion-title>
+    <ion-buttons end>
+      <button ion-button secondary (click)="logout()">
+        <ion-icon name="power"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+<ion-grid>
+	<ion-row>
+		<ion-col col-4 col-sm-3>
+			<h3>Votes: {{votedDelegates.length-1}}/101</h3>
+		</ion-col>
+		<ion-col col-8 col-sm-6>
+			<button ion-button (click)="voteGDT()" block >Vote all GDT</button>
+		</ion-col>
+		<ion-col col-12 col-sm-3>
+			<button ion-button (click)="voteSelected()" block >Vote for selected</button>
+		</ion-col>
+	</ion-row>
+</ion-grid>
+<ion-grid id="txTable">
+    <ion-row>
+      <ion-col col-2 col-sm-1>
+      </ion-col>
+      <ion-col col-3 col-sm-1>
+        <h4>Rank</h4>
+      </ion-col>
+      <ion-col col-7 col-sm-3>
+        <h4>Name</h4>
+      </ion-col>
+      <ion-col col-sm-3 class="hidden-xs">
+        <h4>Address</h4>
+      </ion-col>
+      <ion-col col-sm-2 class="hidden-xs">
+        <h4>Uptime</h4>
+      </ion-col>
+      <ion-col col-sm-2 class="hidden-xs">
+        <h4>Approval</h4>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="shownDelegates == null">
+      <ion-col col-12 col-sm-2>
+        <h5>Loading Delegates</h5>
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+      </ion-col>
+      <ion-col col-12 col-sm-3>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let activeDelegate of shownDelegates">
+      <ion-col col-2 col-sm-1>
+        <ion-checkbox [(ngModel)]="activeDelegate.voted" (ionChange)="updateVotes(activeDelegate.publicKey)"></ion-checkbox>
+      </ion-col>
+      <ion-col col-3 col-sm-1>
+        {{activeDelegate.rank}}
+      </ion-col>
+      <ion-col col-7 col-sm-3>
+        {{activeDelegate.username}}
+      </ion-col>
+      <ion-col col-12 col-sm-3 class="hidden-xs">
+        <span class="show-xs"><b>Address:</b></span> {{activeDelegate.address}}
+      </ion-col>
+      <ion-col col-12 col-sm-2 class="hidden-xs">
+        <span class="show-xs"><b>Uptime:</b></span> {{activeDelegate.productivity}}%
+      </ion-col>
+      <ion-col col-12 col-sm-2 class="hidden-xs">
+        <span class="show-xs"><b>Approval:</b></span> {{activeDelegate.approval}}%
+      </ion-col>
+    </ion-row>
+    <ion-infinite-scroll (ionInfinite)="onScroll($event)">
+	   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+	 </ion-infinite-scroll>
+  </ion-grid>
+
+</ion-content>

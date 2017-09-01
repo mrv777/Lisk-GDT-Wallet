@@ -1,0 +1,22 @@
+page-voting {
+	#votingHeader button {
+        font-size: 1.5em;
+    }
+
+    h3 {
+    	text-align: center;
+    	margin: auto;
+    }
+
+	@media(max-width: 575px){
+        .hidden-xs {
+            display:none;
+        }
+        
+    }
+    @media(min-width: 576px){
+        .show-xs {
+            display:none;
+        }
+    }
+}
