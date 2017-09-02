@@ -118,6 +118,12 @@ export class AccountDataProvider {
   		lisk.api(this.OPTIONS).listStandbyDelegates(amount, resolve);
   	});
   };
+
+  searchDelegates(username: string) {
+	return new Promise(resolve => {
+  		lisk.api(this.OPTIONS).searchDelegateByUsername(username, resolve);
+  	});
+  };
   
   getPublicKey(): string {
     return this.PUBLIC_KEY;

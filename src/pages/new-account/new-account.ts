@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Screenshot } from '@ionic-native/screenshot';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 
@@ -23,7 +24,7 @@ export class NewAccountPage {
   accountID: string;
   saved: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController, private screenshot: Screenshot) {
   }
 
   ionViewDidLoad() {
@@ -43,10 +44,10 @@ export class NewAccountPage {
   }
 
   save() {
-    // this.screenshot.save('jpg', 80).then(res => { 
-    //   console.log(res.filePath);
-    // })
-    // .catch(() => console.error("screenshot error"));
+    this.screenshot.save('jpg', 80).then(res => { 
+      console.log(res.filePath);
+    })
+    .catch(() => console.error("screenshot error"));
     this.saved = true;
   }
 
