@@ -20,9 +20,17 @@
 				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
 				
 			</ion-item>
+			<ion-item>
+			  <ion-label>Account</ion-label>
+			  <ion-select [(ngModel)]="accountNum">
+			    <ion-option value="0">1</ion-option>
+			    <ion-option value="1">2</ion-option>
+			    <ion-option value="2">3</ion-option>
+			  </ion-select>
+			</ion-item>
 			<ion-item *ngIf="fingerAvailable === true" id="savePasswordBox">
-				<ion-label>Save to Fingerprint</ion-label>
-    		<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
+				<ion-label>Save to Fingerprint for account {{accountNum}}</ion-label>
+    			<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
 			</ion-item>
 			<ion-item>
 				<ion-label stacked color="primary">Node</ion-label>

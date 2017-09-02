@@ -19,7 +19,7 @@ export class AccountDataProvider {
   KEY_PAIR;
   PUBLIC_KEY;
   NODE_URL;
-  SAVED_PASSWORD = "";
+  SAVED_PASSWORD = ["","",""];
   OPTIONS;
 
   constructor(
@@ -29,23 +29,33 @@ export class AccountDataProvider {
   ) {
       this.secureStorage.create('lisk_gdt_password')
       .then((storage: SecureStorageObject) => {
-        storage.get('password')
+        storage.get('password0')
         .then(
-          data => { this.SAVED_PASSWORD = data; },
+          data => { this.SAVED_PASSWORD[0] = data; },
+          error => console.log(error)
+        );
+        storage.get('password1')
+        .then(
+          data => { this.SAVED_PASSWORD[1] = data; },
+          error => console.log(error)
+        );
+        storage.get('password2')
+        .then(
+          data => { this.SAVED_PASSWORD[2] = data; },
           error => console.log(error)
         );
       });
 
   }
 
-  login(password: string, savePassword: boolean): void {
+  login(password: string, savePassword: boolean, accountNum: number): void {
     this.PASSWORD = password;
     if (savePassword){ 
-      this.secureStorage.create('lisk_gdt_password')
+      this.secureStorage.create(`lisk_gdt_password`)
       .then((storage: SecureStorageObject) => {
-        storage.set('password', password)
+        storage.set(`password${accountNum}`, password)
         .then(
-          data => { this.SAVED_PASSWORD = password; },
+          data => { this.SAVED_PASSWORD[accountNum] = password; },
           error => console.log(error)
         );
       });
@@ -68,8 +78,8 @@ export class AccountDataProvider {
     this.events.publish('user:login');
   };
 
-  getSavedPassword(): string {
-    return this.SAVED_PASSWORD;
+  getSavedPassword(accountNum: number): string {
+    return this.SAVED_PASSWORD[accountNum];
   }
 
   logout(): void {
