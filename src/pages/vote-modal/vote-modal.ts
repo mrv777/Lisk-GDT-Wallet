@@ -19,7 +19,6 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 export class VoteModalPage {
   disableVote: boolean = false;
   delegatesVoted: string[];
-  delegateNames: string[];
   delegatesVotedNames: string[];
   accountHasSecondPass: boolean = false;
   secondPass: string;
@@ -29,9 +28,8 @@ export class VoteModalPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner) {
   	if (navParams.get('delegates')) {
       this.delegatesVoted = navParams.get('delegates');
-      this.delegateNames = navParams.get('names');
+      this.delegatesVotedNames = navParams.get('names');
     }
-    this.delegatesVotedNames = this.delegatesVoted;
 	
 	this.accountData.getAccount().then((account) => {
 	  	if (account['account']['secondPublicKey'] != null){

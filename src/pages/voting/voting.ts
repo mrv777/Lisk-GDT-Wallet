@@ -92,9 +92,17 @@ export class VotingPage {
   	for (let i=0;i < this.gdtMembers.length; i++) {
   		if (this.votedDelegates.indexOf(this.gdtMembers[i]) == -1) {
   			this.updateVotesArray.push(`+${this.gdtMembers[i]}`);
+  			let name = this.activeDelegates.filter(x => x.publicKey == this.gdtMembers[i]); 
+  			if (name.length > 0) {
+  				this.updateVotesNamesArray.push(`+${name[0]['username']}`);
+  			} else {
+  				this.updateVotesNamesArray.push(`+${this.gdtMembers[i]}`);
+  			}
+  			
   		}
   	}
   	this.updateVotesArray.splice(0, 1);
+  	this.updateVotesNamesArray.splice(0, 1);
   	console.log(this.updateVotesArray);
   	this.openModal();
   	//this.accountData.voteDelegtes(this.updateVotesArray);
@@ -108,19 +116,32 @@ export class VotingPage {
       //if (data == true) {
       	this.loadVoting();
       	this.updateVotesArray = [''];
+      	this.updateVotesNamesArray = [''];
       //}
     });
   }
 
   voteSelected() {
   	for (let i=1;i < this.updateVotesArray.length; i++) {
+  		let name = this.activeDelegates.filter(x => x.publicKey == this.updateVotesArray[i]); 
   		if (this.votedDelegates.indexOf(this.updateVotesArray[i]) != -1) {
   			this.updateVotesArray[i] = `-${this.updateVotesArray[i]}`;
+  			if (name.length > 0) {
+  				this.updateVotesNamesArray.push(`-${name[0]['username']}`);
+  			} else {
+  				this.updateVotesNamesArray.push(`-${this.updateVotesArray[i]}`);
+  			}
   		} else {
   			this.updateVotesArray[i] = `+${this.updateVotesArray[i]}`;
+  			if (name.length > 0) {
+  				this.updateVotesNamesArray.push(`+${name[0]['username']}`);
+  			} else {
+  				this.updateVotesNamesArray.push(`+${this.updateVotesArray[i]}`);
+  			}
   		}
   	} 
   	this.updateVotesArray.splice(0, 1);
+  	this.updateVotesNamesArray.splice(0, 1);
   	console.log(this.updateVotesArray);
   	this.openModal();
   	// this.accountData.voteDelegtes(this.updateVotesArray);

@@ -20,32 +20,35 @@
 				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
 				
 			</ion-item>
-			<ion-item>
-			  <ion-label>Account</ion-label>
-			  <ion-select [(ngModel)]="accountNum">
+			<ion-item *ngIf="fingerAvailable === true" id="savePasswordBox">
+				<ion-label>Save to Fingerprint for Account {{accountNum+1}}</ion-label>
+    			<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
+			</ion-item>
+		</ion-list>
+		{{message}}
+		<ion-row>
+			<ion-col>
+				<ion-label item-start stacked color="primary">Node</ion-label>
+				<ion-select item-start id="nodeSelect" [(ngModel)]="nodeSelect" (ionChange)='changeNode()'  formControlName="nodeSelectForm">
+					<ion-option value="mainnet/">Mainnet</ion-option>
+					<ion-option value="testnet/">Testnet</ion-option>
+					<ion-option value="">Custom</ion-option>
+				</ion-select>
+			</ion-col>
+			<ion-col>
+				<ion-label item-start stacked color="primary">Account for Fingerprint</ion-label>
+				<ion-select item-end [(ngModel)]="accountNum" formControlName="accountNumForm">
 			    <ion-option value="0">1</ion-option>
 			    <ion-option value="1">2</ion-option>
 			    <ion-option value="2">3</ion-option>
 			  </ion-select>
-			</ion-item>
-			<ion-item *ngIf="fingerAvailable === true" id="savePasswordBox">
-				<ion-label>Save to Fingerprint for account {{accountNum}}</ion-label>
-    			<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
-			</ion-item>
-			<ion-item>
-				<ion-label stacked color="primary">Node</ion-label>
-				<ion-select id="nodeSelect" [(ngModel)]="nodeSelect" (ionChange)='changeNode()'  formControlName="nodeSelectForm">
-					<ion-option value="mainnet/">Mainnet (Default)</ion-option>
-					<ion-option value="testnet/">Testnet (For Testing)</ion-option>
-					<ion-option value="">Custom (Advanced)</ion-option>
-				</ion-select>
-			</ion-item>
-			<ion-item [class.hide]="hideCustom">
-				<ion-input [(ngModel)]="node" name="node" type="text" formControlName="nodeForm" placeholder="URL:PORT of the custom node">
-				</ion-input>
-			</ion-item>
-		</ion-list>
-		{{message}}
+		  </ion-col>
+		</ion-row>
+		<ion-row [class.hide]="hideCustom">
+			<ion-input [(ngModel)]="node" name="node" type="text" formControlName="nodeForm" placeholder="URL:PORT of the custom node">
+			</ion-input>
+		</ion-row>
+
 		<ion-row responsive-sm>
 			<ion-col>
 				<button ion-button color="secondary" (click)="onLogin()" type="submit" block [disabled]="!loginForm.valid || disableLogin">Login</button>
