@@ -62,7 +62,7 @@
     </ion-row>
     <ion-row *ngFor="let activeDelegate of shownDelegates">
       <ion-col col-2 col-sm-1>
-        <ion-checkbox [(ngModel)]="activeDelegate.voted" (ionChange)="updateVotes(activeDelegate.publicKey)"></ion-checkbox>
+        <ion-checkbox [(ngModel)]="activeDelegate.voted" (ionChange)="updateVotes(activeDelegate)"></ion-checkbox>
       </ion-col>
       <ion-col col-3 col-sm-1>
         {{activeDelegate.rank}}

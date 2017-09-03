@@ -20,9 +20,12 @@ page-vote-modal {
     }
 
     #qrIcon, #fingerIcon {
-        font-size: 2em;
+        font-size: 1.75em;
         margin: 0;
         padding: 0 0.4em;
         height: 100%;
+        color: #777;
+        top: 13px;
+    	position: relative;
     }
 }

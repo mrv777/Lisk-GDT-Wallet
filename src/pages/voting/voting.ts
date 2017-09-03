@@ -61,12 +61,14 @@ export class VotingPage {
 	  });
   }
 
-  updateVotes(vote:string) {
-  	const index = this.updateVotesArray.indexOf(vote); 
+  updateVotes(vote:object) { 
+  	const index = this.updateVotesArray.indexOf(vote['publicKey']); 
   	if (index == -1) {
-  		this.updateVotesArray.push(vote);
+  		this.updateVotesArray.push(vote['publicKey']);
+  		this.updateVotesNamesArray.push(vote['username']);
   	} else {
   		this.updateVotesArray.splice(index, 1);
+  		this.updateVotesNamesArray.splice(index, 1);
   	}
   	console.log(this.updateVotesArray);
   }
@@ -92,7 +94,7 @@ export class VotingPage {
   	for (let i=0;i < this.gdtMembers.length; i++) {
   		if (this.votedDelegates.indexOf(this.gdtMembers[i]) == -1) {
   			this.updateVotesArray.push(`+${this.gdtMembers[i]}`);
-  			let name = this.activeDelegates.filter(x => x['publicKey'] == this.gdtMembers[i]); 
+  			let name = this.shownDelegates.filter(x => x['publicKey'] == this.gdtMembers[i]); 
   			if (name.length > 0) {
   				this.updateVotesNamesArray.push(`+${name[0]['username']}`);
   			} else {
@@ -126,18 +128,10 @@ export class VotingPage {
   		let name = this.activeDelegates.filter(x => x['publicKey'] == this.updateVotesArray[i]); 
   		if (this.votedDelegates.indexOf(this.updateVotesArray[i]) != -1) {
   			this.updateVotesArray[i] = `-${this.updateVotesArray[i]}`;
-  			if (name.length > 0) {
-  				this.updateVotesNamesArray.push(`-${name[0]['username']}`);
-  			} else {
-  				this.updateVotesNamesArray.push(`-${this.updateVotesArray[i]}`);
-  			}
+  			this.updateVotesNamesArray[i] = `-${this.updateVotesNamesArray[i]}`;
   		} else {
   			this.updateVotesArray[i] = `+${this.updateVotesArray[i]}`;
-  			if (name.length > 0) {
-  				this.updateVotesNamesArray.push(`+${name[0]['username']}`);
-  			} else {
-  				this.updateVotesNamesArray.push(`+${this.updateVotesArray[i]}`);
-  			}
+  			this.updateVotesNamesArray[i] = `+${this.updateVotesNamesArray[i]}`;
   		}
   	} 
   	this.updateVotesArray.splice(0, 1);
