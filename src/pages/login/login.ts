@@ -29,7 +29,7 @@ export class LoginPage {
   savePassword: boolean = false;
   fingerAvailable: boolean = true;
   message: string;
-  accountNum: number = 0;
+  accountNum: number = 1;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder, private faio: FingerprintAIO, public modalCtrl: ModalController, public platform: Platform) {
     this.loginForm = this.formBuilder.group({
@@ -71,7 +71,7 @@ export class LoginPage {
   onLogin() {
     this.disableLogin = true;
     this.accountData.setNode(this.node).then(() => {  
-    	this.accountData.login(this.password, this.savePassword, this.accountNum);
+    	this.accountData.login(this.password, this.savePassword, this.accountNum-1);
     	this.navCtrl.setRoot(HomePage);
     });
   }
@@ -107,7 +107,7 @@ export class LoginPage {
       clientSecret: 'gDtLisk2o17Wal!et', //Only necessary for Android
       disableBackup: false  //Only for Android(optional)
     })
-    .then((result: any) => { console.log(result.withFingerprint); this.password = this.accountData.getSavedPassword(this.accountNum); } )
+    .then((result: any) => { console.log(result.withFingerprint); this.password = this.accountData.getSavedPassword(this.accountNum-1); } )
     .catch((error: any) => console.log(error));
   }
 

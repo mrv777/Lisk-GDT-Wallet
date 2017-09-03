@@ -18,6 +18,10 @@ page-login {
         border: none;
     }
 
+    .select-md {
+   		max-width: initial;
+    }
+
     @media(max-width: 1023px){
         #headerLogo {
             width: 192px;

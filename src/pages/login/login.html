@@ -21,7 +21,7 @@
 				
 			</ion-item>
 			<ion-item *ngIf="fingerAvailable === true" id="savePasswordBox">
-				<ion-label>Save to Fingerprint for Account {{accountNum+1}}</ion-label>
+				<ion-label>Save to Fingerprint for Account {{accountNum}}</ion-label>
     			<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
 			</ion-item>
 		</ion-list>
@@ -29,7 +29,7 @@
 		<ion-row>
 			<ion-col>
 				<ion-label item-start stacked color="primary">Node</ion-label>
-				<ion-select item-start id="nodeSelect" [(ngModel)]="nodeSelect" (ionChange)='changeNode()'  formControlName="nodeSelectForm">
+				<ion-select item-start id="nodeSelect" [(ngModel)]="nodeSelect" (ionChange)='changeNode()' formControlName="nodeSelectForm">
 					<ion-option value="mainnet/">Mainnet</ion-option>
 					<ion-option value="testnet/">Testnet</ion-option>
 					<ion-option value="">Custom</ion-option>
@@ -38,9 +38,9 @@
 			<ion-col>
 				<ion-label item-start stacked color="primary">Account for Fingerprint</ion-label>
 				<ion-select item-end [(ngModel)]="accountNum" formControlName="accountNumForm">
-			    <ion-option value="0">1</ion-option>
-			    <ion-option value="1">2</ion-option>
-			    <ion-option value="2">3</ion-option>
+			    <ion-option value="1">1</ion-option>
+			    <ion-option value="2">2</ion-option>
+			    <ion-option value="3">3</ion-option>
 			  </ion-select>
 		  </ion-col>
 		</ion-row>
