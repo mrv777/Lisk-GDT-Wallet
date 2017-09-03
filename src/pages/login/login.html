@@ -35,7 +35,7 @@
 					<ion-option value="">Custom</ion-option>
 				</ion-select>
 			</ion-col>
-			<ion-col>
+			<ion-col *ngIf="fingerAvailable === true">
 				<ion-label item-start stacked color="primary">Account for Fingerprint</ion-label>
 				<ion-select item-end [(ngModel)]="accountNum" formControlName="accountNumForm">
 			    <ion-option value="1">1</ion-option>

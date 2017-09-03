@@ -26,6 +26,7 @@ export class SendModalPage {
   amount: number = 0;
   status: number;
   disableSend: boolean = false;
+  disableClose: boolean = false;
   resultTxt: string = '';
   secondPass: string;
   accountHasSecondPass: boolean = false;
@@ -34,7 +35,7 @@ export class SendModalPage {
   	this.sendForm = this.formBuilder.group({
       recipientForm: ['', Validators.required],
       amountForm: ['', Validators.required],
-      secondForm: ['', Validators.required]
+      secondForm: ['']
     });
     if (navParams.get('address')) {
       this.recipient = navParams.get('address');
@@ -63,9 +64,10 @@ export class SendModalPage {
   		} else {
   			this.status = 1;
   			this.resultTxt = "Sending Lisk, please wait";
+  			this.disableClose = true;
 		    setTimeout( () => {
 		      this.closeModal();
-		 	}, 5000);
+		 	}, 2000);
   		}
 	  });
     this.status = 0;

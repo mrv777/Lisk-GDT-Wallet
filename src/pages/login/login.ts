@@ -48,6 +48,8 @@ export class LoginPage {
           this.fingerAvailable = false;
         }
       });
+    } else {
+    	this.fingerAvailable = false;
     }
 
     this.accountData.getNode().then((node) => {

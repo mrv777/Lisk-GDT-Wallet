@@ -42,7 +42,7 @@
     </ion-row>
     <ion-row responsive-sm>
       <ion-col>
-			<button ion-button color="light" (click)="closeModal()" block>Close</button>
+			<button ion-button [disabled]="disableClose" color="light" (click)="closeModal()" block>Close</button>
 		</ion-col>
 	</ion-row>
   </form>
