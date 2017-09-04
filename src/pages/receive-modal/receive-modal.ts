@@ -29,7 +29,7 @@ export class ReceiveModalPage {
   }
 
   copyAccount() {
-  	this.clipboard.copy('Hello world');
+  	this.clipboard.copy(this.accountID);
   	this.showToast('Address copied to clipboard');
   }
 
