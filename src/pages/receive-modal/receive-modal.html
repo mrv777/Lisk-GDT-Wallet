@@ -18,7 +18,7 @@
     <ion-row>
       <ion-col>
           <h6>Your address is</h6>
-          <h4>{{accountID}}</h4>
+          <h4 (click)="copyAccount()">{{accountID}} <ion-icon name="copy"></ion-icon></h4>
       </ion-col>
     </ion-row>
     <ion-row>

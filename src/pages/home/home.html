@@ -36,45 +36,30 @@
   </ion-grid>
 
   <ion-grid id="txTable">
-    <ion-row class="hidden-xs">
-      <ion-col col-2>
+    <ion-row>
+      <ion-col col-3 col-sm-2>
         <h4>Time</h4>
       </ion-col>
-      <ion-col col-3>
+      <ion-col col-0 col-sm-4 class="hidden-xs">
         <h4>Transaction ID</h4>
       </ion-col>
-      <ion-col col-3>
+      <ion-col col-6 col-sm-4>
         <h4>From / To</h4>
       </ion-col>
-      <ion-col col-2>
+      <ion-col col-3 col-sm-2>
         <h4>Amount</h4>
       </ion-col>
-      <ion-col col-2>
-        <h4>Fee</h4>
-      </ion-col>
     </ion-row>
-    <ion-row *ngIf="transactions == null">
-      <ion-col col-12 col-sm-2>
+    <ion-row *ngIf="transactions == null || (transactions != null && transactions.length == 0)">
+      <ion-col col-12 col-sm-2 *ngIf="transactions == null">
         <h5>Loading Transactions</h5>
       </ion-col>
-      <ion-col col-12 col-sm-3>
-      </ion-col>
-      <ion-col col-12 col-sm-3>
-      </ion-col>
-      <ion-col col-12 col-sm-2>
-      </ion-col>
-      <ion-col col-12 col-sm-2>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="transactions != null && transactions.length == 0">
-      <ion-col col-12 col-sm-2>
+      <ion-col col-12 col-sm-2 *ngIf="transactions != null && transactions.length == 0">
         <h5>No Transactions</h5>
       </ion-col>
-      <ion-col col-12 col-sm-3>
+      <ion-col col-12 col-sm-4>
       </ion-col>
-      <ion-col col-12 col-sm-3>
-      </ion-col>
-      <ion-col col-12 col-sm-2>
+      <ion-col col-12 col-sm-4>
       </ion-col>
       <ion-col col-12 col-sm-2>
       </ion-col>
@@ -83,30 +68,26 @@
                                                       itemsPerPage: numToDisplay,
                                                       currentPage: p,
                                                       totalItems: total }">
-      <ion-col col-12 col-sm-2>
-        <span class="show-xs"><b>Time:</b></span> {{transaction.date | date:'short'}}
+      <ion-col col-3 col-sm-2>
+        {{transaction.date | date:'M/d/yy H:m'}}
       </ion-col>
-      <ion-col col-12 col-sm-3>
-        <span class="show-xs"><b>ID:</b></span> {{transaction.id}}
+      <ion-col col-0 col-sm-4 col-4 class="hidden-xs">
+        {{transaction.id}}
       </ion-col>
-      <ion-col col-12 col-sm-3 *ngIf="transaction.recipientId != accountID && transaction.type == 0">
-        <span class="show-xs"><b>To:</b></span> {{transaction.recipientId}}
+      <ion-col col-6 col-sm-4 *ngIf="transaction.recipientId != accountID && transaction.type == 0">
+        {{transaction.recipientId}}
       </ion-col>
-      <ion-col col-12 col-sm-3 *ngIf="transaction.senderId != accountID  && transaction.type == 0">
-        <span class="show-xs"><b>From:</b></span> {{transaction.senderId}}
+      <ion-col col-6 col-sm-4 *ngIf="transaction.senderId != accountID  && transaction.type == 0">
+        {{transaction.senderId}}
       </ion-col>
-      <ion-col col-12 col-sm-3 *ngIf="transaction.type != 0">
-        <span class="show-xs"><b>Type:</b></span> 
+      <ion-col col-6 col-sm-4 *ngIf="transaction.type != 0">
         <span *ngIf="transaction.type == 1">Second Passphrase</span>
         <span *ngIf="transaction.type == 2">Delegate Registration</span>
         <span *ngIf="transaction.type == 3">Delegate Vote</span>
         <span *ngIf="transaction.type != 3 && transaction.type != 2 && transaction.type != 1">{{transaction.type}}</span>
       </ion-col>
-      <ion-col col-12 col-sm-2 [ngClass]="{'danger' : (transaction.senderId == accountID && transaction.amount > 0), 'success':(transaction.recipientId == accountID && transaction.amount > 0)}">
-        <span class="show-xs"><b>Amount:</b></span> {{transaction.amount/100000000 | number : '1.0-8'}}
-      </ion-col>
-      <ion-col col-12 col-sm-2 [ngClass]="{'danger' : (transaction.senderId == accountID)}">
-        <span class="show-xs"><b>Fee:</b> </span>{{transaction.fee/100000000 | number : '1.0-8'}}
+      <ion-col col-3 col-sm-2>
+        <span [ngClass]="{'danger' : (transaction.senderId == accountID && transaction.amount > 0), 'success':(transaction.recipientId == accountID && transaction.amount > 0)}">{{transaction.amount/100000000 | number : '1.0-8'}}</span> <span class="feeTxt" [ngClass]="{'danger' : (transaction.senderId == accountID)}">({{transaction.fee/100000000 | number : '1.0-8'}})</span>
       </ion-col>
     </ion-row>
     <pagination-controls  id="txList"

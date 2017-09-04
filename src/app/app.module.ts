@@ -7,6 +7,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Screenshot } from '@ionic-native/screenshot';
+import { Clipboard } from '@ionic-native/clipboard';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -68,6 +69,7 @@ import { AccountProvider } from '../providers/account/account';
     AccountDataProvider,
     AccountProvider,
     Screenshot,
+    Clipboard,
   ]
 })
 export class AppModule {}

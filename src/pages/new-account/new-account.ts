@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
 import { Screenshot } from '@ionic-native/screenshot';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
@@ -24,7 +24,7 @@ export class NewAccountPage {
   accountID: string;
   saved: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController, private screenshot: Screenshot) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController, private screenshot: Screenshot, private toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -49,6 +49,22 @@ export class NewAccountPage {
     })
     .catch(() => console.error("screenshot error"));
     this.saved = true;
+    this.showToast(`Screenshot of account and passphrase saved to your photos.`);
+  }
+
+  showToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      showCloseButton: true,
+      closeButtonText: 'ok',
+      position: 'middle'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
   }
 
   closeModal() {

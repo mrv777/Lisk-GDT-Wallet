@@ -1,6 +1,6 @@
 {
     "name": "LiskGDTWallet",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "author": "MrV",
     "homepage": "https://liskgdt.net/",
     "private": true,
@@ -21,6 +21,7 @@
         "@angular/platform-browser": "4.1.3",
         "@angular/platform-browser-dynamic": "4.1.3",
         "@ionic-native/barcode-scanner": "^4.2.0",
+        "@ionic-native/clipboard": "^4.2.1",
         "@ionic-native/core": "3.12.1",
         "@ionic-native/fingerprint-aio": "^4.2.0",
         "@ionic-native/screenshot": "^4.2.1",
@@ -31,6 +32,7 @@
         "@techiediaries/ngx-qrcode": "0.0.5",
         "com.darktalker.cordova.screenshot": "^0.1.6",
         "cordova-android": "^6.2.3",
+        "cordova-clipboard": "^1.0.0",
         "cordova-plugin-add-swift-support": "file:node_modules\\cordova-plugin-add-swift-support",
         "cordova-plugin-compat": "^1.0.0",
         "cordova-plugin-console": "^1.0.5",
@@ -67,7 +69,8 @@
             "cordova-plugin-statusbar": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "com.darktalker.cordova.screenshot": {}
+            "com.darktalker.cordova.screenshot": {},
+            "cordova-clipboard": {}
         },
         "platforms": [
             "android"

@@ -33,7 +33,7 @@ export class HomePage {
       console.log("Logged in");
       this.accountID = this.accountData.getAccountID();
 	  this.loadTxs();
-      this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 3000);
+      this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 300000);
     } else {
       console.log("Not logged in");
       this.navCtrl.setRoot(LoginPage);
