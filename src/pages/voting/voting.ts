@@ -21,7 +21,7 @@ export class VotingPage {
 
   accountID: string;
   votes: object[];
-  numStandby: number = 50;
+  offsetStandby: number = 101;
   votedDelegates: string[] = [''];
   shownDelegates: object[];
   activeDelegates: object[];
@@ -74,8 +74,8 @@ export class VotingPage {
   	console.log(this.updateVotesArray);
   }
 
-  onScroll(event) { console.log(event);
-    this.accountData.getStandbyDelegates(this.numStandby).then((delegates) => {
+  onScroll(event) { 
+  	this.accountData.sendRequest('delegates/', { limit: 50, orderBy: 'rate:asc', offset: this.offsetStandby }).then((delegates) => {
 	  	this.standbyDelegates = delegates['delegates'];
 	  	for (let i=0;i < this.standbyDelegates.length; i++) {
 	  		if (this.votedDelegates.indexOf(this.standbyDelegates[i]['publicKey']) != -1) {
@@ -84,10 +84,23 @@ export class VotingPage {
 	  			this.standbyDelegates[i]['voted'] = false;
 	  		}
 	  	}
-	  	this.shownDelegates = this.activeDelegates.concat(this.standbyDelegates);
+	  	this.shownDelegates = this.shownDelegates.concat(this.standbyDelegates);
 	  	event.complete();
 	  });
-    this.numStandby += 50;
+    this.offsetStandby += 50;
+
+   //  this.accountData.getStandbyDelegates(this.numStandby).then((delegates) => {
+	  // 	this.standbyDelegates = delegates['delegates'];
+	  // 	for (let i=0;i < this.standbyDelegates.length; i++) {
+	  // 		if (this.votedDelegates.indexOf(this.standbyDelegates[i]['publicKey']) != -1) {
+	  // 			this.standbyDelegates[i]['voted'] = true;
+	  // 		} else {
+	  // 			this.standbyDelegates[i]['voted'] = false;
+	  // 		}
+	  // 	}
+	  // 	this.shownDelegates = this.activeDelegates.concat(this.standbyDelegates);
+	  // 	event.complete();
+	  // });
   }
 
   voteGDT() {

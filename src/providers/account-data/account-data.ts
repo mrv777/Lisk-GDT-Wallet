@@ -129,6 +129,12 @@ export class AccountDataProvider {
   	});
   };
 
+  sendRequest(request: string, parameters: object) {
+	return new Promise(resolve => {
+  		lisk.api(this.OPTIONS).sendRequest(request, parameters, resolve);
+  	});
+  };
+
   searchDelegates(username: string) {
 	return new Promise(resolve => {
   		lisk.api(this.OPTIONS).searchDelegateByUsername(username, resolve);
