@@ -1,0 +1,39 @@
+<!--
+  Generated template for the ContactsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Contacts</ion-title>
+    <ion-buttons end>
+      <button ion-button secondary (click)="editContact('','')">
+        <ion-icon name="person-add"></ion-icon>
+      </button>
+      <button ion-button secondary (click)="logout()">
+        <ion-icon name="power"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+   <ion-list *ngIf="contacts != null">
+    <ion-item *ngFor="let contact of contacts">
+      <label *ngIf="contact.name != ''">{{contact.name}}  
+        <button ion-button clear color="dark" type="button" (click)="editContact(contact.name,contact.account)"><ion-icon name="create"></ion-icon></button> 
+        <button ion-button clear color="dark" type="button" (click)="removeContact(contact.account)"><ion-icon name="trash"></ion-icon></button> 
+      </label>
+      <label *ngIf="contact.name == ''">{{contact.account}} 
+        <button ion-button clear color="dark" type="button" (click)="editContact(contact.name,contact.account)"><ion-icon name="create"></ion-icon></button> 
+        <button ion-button clear color="dark" type="button" (click)="removeContact(contact.account)"><ion-icon name="trash"></ion-icon></button>
+      </label>
+    </ion-item>
+  </ion-list> 
+  <h4 *ngIf="contacts == null">No Contacts</h4>
+</ion-content>

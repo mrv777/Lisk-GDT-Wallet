@@ -39,8 +39,12 @@ page-home {
     }
 
 	@media(max-width: 575px){
-        #homeHeader .toolbar-title-md{
-            font-size: 1em;
+        // #homeHeader .toolbar-title-md{
+        //     font-size: 1em;
+        // }
+
+        ion-app.md {
+        	font-size: 1.2rem;
         }
 
         .hidden-xs {

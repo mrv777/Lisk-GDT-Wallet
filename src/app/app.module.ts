@@ -21,6 +21,8 @@ import { SendModalPage } from '../pages/send-modal/send-modal';
 import { ReceiveModalPage } from '../pages/receive-modal/receive-modal';
 import { NewAccountPage } from '../pages/new-account/new-account';
 import { VoteModalPage } from '../pages/vote-modal/vote-modal';
+import { ContactsPage } from '../pages/contacts/contacts';
+import { EditContactModalPage } from '../pages/edit-contact-modal/edit-contact-modal';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -38,6 +40,8 @@ import { AccountProvider } from '../providers/account/account';
     ReceiveModalPage,
     NewAccountPage,
     VoteModalPage,
+    ContactsPage,
+    EditContactModalPage,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +62,8 @@ import { AccountProvider } from '../providers/account/account';
     ReceiveModalPage,
     NewAccountPage,
     VoteModalPage,
+    ContactsPage,
+    EditContactModalPage,
   ],
   providers: [
     StatusBar,

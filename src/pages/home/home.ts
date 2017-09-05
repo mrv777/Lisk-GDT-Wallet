@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController, ToastController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
 
@@ -21,10 +21,12 @@ export class HomePage {
   p: number = 1;
   total: number = 0;
   numToDisplay: number = 10;
+  contacts: string[];
+  contactNames: string[];
 
   subscriptionTx;
 
-  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public modalCtrl: ModalController, private toastCtrl: ToastController) {
 
   }
 
@@ -51,6 +53,23 @@ export class HomePage {
   }
 
   loadTxs() {
+  	this.accountData.getContacts().then((currentContacts) => {
+        if (currentContacts != null) {
+          this.contacts = [];
+          this.contactNames = [];
+          for (let i=0;i < currentContacts.length; i++) {
+            this.contacts.push(currentContacts[i]['account']);
+            if (currentContacts[i]['name'] != '') {
+              this.contactNames.push(currentContacts[i]['name']);
+            } else {
+              this.contactNames.push(currentContacts[i]['account']);
+            }
+          }
+        } else {
+          this.contacts = [''];
+          this.contactNames = [''];
+        }
+      });
   	this.accountData.getAccount(this.accountID).then((account) => { console.log(account);
 	  	this.account = account;
 	  });
@@ -65,9 +84,42 @@ export class HomePage {
 	  });
   }
 
+  addContact(newAccount: string) {
+    this.accountData.addContact('',newAccount).then(() => {
+      let toast = this.toastCtrl.create({
+        message: 'Contact Added',
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.onDidDismiss(() => {
+        console.log('Dismissed toast');
+      });
+
+      toast.present();
+      this.accountData.getContacts().then((currentContacts) => {
+        if (currentContacts != null) {
+          this.contacts = [];
+          this.contactNames = [];
+          for (let i=0;i < currentContacts.length; i++) {
+            this.contacts.push(currentContacts[i]['account']);
+            if (currentContacts[i]['name'] != '') {
+              this.contactNames.push(currentContacts[i]['name']);
+            } else {
+              this.contactNames.push(currentContacts[i]['account']);
+            }
+          }
+        } else {
+          this.contacts = [''];
+          this.contactNames = [''];
+        }
+      });
+    });  
+  }
+
   pageChanged(event){
   	this.p = event;
   	clearInterval(this.subscriptionTx);
+  	this.loadTxs();
   	this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 3000); 
   	console.log(event);
   }

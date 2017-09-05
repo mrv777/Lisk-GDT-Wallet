@@ -74,11 +74,15 @@
       <ion-col col-0 col-sm-4 col-4 class="hidden-xs">
         {{transaction.id}}
       </ion-col>
-      <ion-col col-6 col-sm-4 *ngIf="transaction.recipientId != accountID && transaction.type == 0">
-        {{transaction.recipientId}}
+      <ion-col col-6 col-sm-4 *ngIf="transaction.recipientId != accountID && transaction.type == 0">    
+        <span *ngIf="contacts.indexOf(transaction.recipientId) != -1">{{contactNames[contacts.indexOf(transaction.recipientId)]}}</span> 
+        <span *ngIf="contacts.indexOf(transaction.recipientId) == -1">{{transaction.recipientId}} </span> 
+        <ion-icon *ngIf="contacts.indexOf(transaction.recipientId) === -1" class="addContact" (click)="addContact(transaction.recipientId)" name="person-add"></ion-icon>
       </ion-col>
       <ion-col col-6 col-sm-4 *ngIf="transaction.senderId != accountID  && transaction.type == 0">
-        {{transaction.senderId}}
+        <span *ngIf="contacts.indexOf(transaction.senderId) != -1">{{contactNames[contacts.indexOf(transaction.senderId)]}}</span> 
+        <span *ngIf="contacts.indexOf(transaction.senderId) == -1">{{transaction.senderId}} </span> 
+        <ion-icon *ngIf="contacts.indexOf(transaction.senderId) === -1" class="addContact" (click)="addContact(transaction.senderId)" name="person-add"></ion-icon>
       </ion-col>
       <ion-col col-6 col-sm-4 *ngIf="transaction.type != 0">
         <span *ngIf="transaction.type == 1">Second Passphrase</span>
