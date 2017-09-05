@@ -22,6 +22,13 @@
 			<ion-input [(ngModel)]="recipient" [disabled]="disableSend" name="recipient" type="text" formControlName="recipientForm" (ngModelChange)="recipient = recipient.toUpperCase()">
    			</ion-input>
    			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
+   			<button id="contactsIcon" ion-button clear color="dark" type="button" item-right (click)="openContacts()"> <ion-icon name="people"> </ion-icon> </button>
+   			<ion-select [(ngModel)]="recipient" name="recipient" style="display:none;" formControlName="recipientForm">
+	          <ion-option *ngFor="let contact of contacts" value="{{contact.account}}">
+	            <span *ngIf="contact.name != ''">{{contact.name}}</span>
+	            <span *ngIf="contact.name == ''">{{contact.account}}</span>
+	          </ion-option>
+	        </ion-select>
 		</ion-item>
 		<ion-item>
 			<ion-label stacked color="primary">Amount</ion-label>

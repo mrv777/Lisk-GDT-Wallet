@@ -44,12 +44,16 @@ export class NewAccountPage {
   }
 
   save() {
+  	this.saved = true;
     this.screenshot.save('jpg', 80).then(res => { 
       console.log(res.filePath);
+      this.showToast(`Screenshot of account and passphrase saved to your photos.`);
     })
-    .catch(() => console.error("screenshot error"));
-    this.saved = true;
-    this.showToast(`Screenshot of account and passphrase saved to your photos.`);
+    .catch(() => {
+    	console.error("screenshot error");
+    	this.showToast(`Error saving screenshot of account and passphrase.`);
+    });
+    
   }
 
   showToast(message: string) {
@@ -57,7 +61,7 @@ export class NewAccountPage {
       message: message,
       showCloseButton: true,
       closeButtonText: 'ok',
-      position: 'middle'
+      position: 'bottom'
     });
 
     toast.onDidDismiss(() => {

@@ -20,6 +20,7 @@ import { AccountDataProvider } from '../../providers/account-data/account-data';
   templateUrl: 'send-modal.html',
 })
 export class SendModalPage {
+  @ViewChild(Select) select: Select;
 
   private sendForm : FormGroup;
   recipient: string = '';
@@ -30,6 +31,7 @@ export class SendModalPage {
   resultTxt: string = '';
   secondPass: string;
   accountHasSecondPass: boolean = false;
+  contacts: object[];
 
   constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public navParams: NavParams, public viewCtrl: ViewController, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder) {
   	this.sendForm = this.formBuilder.group({
@@ -48,7 +50,7 @@ export class SendModalPage {
   }
 
   ionViewDidLoad() {
-    
+    this.loadContacts();
   }
 
   onSend() {
@@ -86,6 +88,20 @@ export class SendModalPage {
       this.secondPass = barcodeData['text'];
     }, (err) => {
         // An error occurred
+    });
+  }
+
+  openContacts() {
+    this.select.open();
+  }
+
+  loadContacts() {
+    this.accountData.getContacts().then((currentContacts) => {
+      if (currentContacts != null) {
+        this.contacts = currentContacts;
+      } else {
+        this.contacts = [{ name:'No Saved Contacts',account:'' }];
+      }
     });
   }
 
