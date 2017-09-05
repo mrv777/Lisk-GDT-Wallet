@@ -1,0 +1,85 @@
+<!--
+  Generated template for the TxDetailsModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Tx {{txId}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-grid *ngIf="tx == null">
+    <ion-row>
+      <ion-col col-12>
+        <h5>Loading Information</h5>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="tx != null && tx['success'] != true">
+    <ion-row>
+      <ion-col col-12>
+        <h5>Error loading transaction</h5>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="tx != null && tx['success'] == true">
+    <ion-row>
+      <ion-col col-4>
+      	Date:
+      </ion-col>
+      <ion-col col-8>
+      	{{tx['transaction']['date'] | date:'short'}}
+      </ion-col>
+    </ion-row>
+	<ion-row>
+      <ion-col col-4>
+      	Block: 
+      </ion-col>
+      <ion-col col-8>
+      	{{tx['transaction']['blockId']}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>
+      	Amount: 
+      </ion-col>
+      <ion-col col-8>
+      	{{tx['transaction']['amount']/100000000 | number : '1.0-8'}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>
+      	Fee: 
+      </ion-col>
+      <ion-col col-8>
+      	{{tx['transaction']['fee']/100000000 | number : '1.0-8'}}	
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>
+      	Height: 
+      </ion-col>
+      <ion-col col-8>
+      	{{tx['transaction']['height']}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4>
+      	Confirmations: 
+      </ion-col>
+      <ion-col col-8>
+      	{{tx['transaction']['confirmations']}}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-12>
+		<button ion-button color="light" (click)="closeModal()" block>Close</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

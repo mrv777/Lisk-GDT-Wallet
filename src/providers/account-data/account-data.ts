@@ -140,6 +140,12 @@ export class AccountDataProvider {
   		lisk.api(this.OPTIONS).searchDelegateByUsername(username, resolve);
   	});
   };
+
+  getTransaction(tx: string) {
+  	return new Promise(resolve => { console.log(tx);
+  		lisk.api(this.OPTIONS).getTransaction(tx, resolve);
+  	});
+  }
   
   getPublicKey(): string {
     return this.PUBLIC_KEY;

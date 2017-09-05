@@ -69,10 +69,10 @@
                                                       currentPage: p,
                                                       totalItems: total }">
       <ion-col col-2 col-sm-2>
-        {{transaction.date | date:'M/d H:m'}}
+        <a (click)="openModal('tx',transaction.id)">{{transaction.date | date:'M/d H:m'}}</a>
       </ion-col>
       <ion-col col-0 col-sm-4 col-4 class="hidden-xs">
-        {{transaction.id}}
+        <a href="https://explorer.lisk.4miners.net/tx/{{transaction.id}}" target="_blank">{{transaction.id}}</a>
       </ion-col>
       <ion-col col-7 col-sm-4 *ngIf="transaction.recipientId != accountID && transaction.type == 0">    
         <span *ngIf="contacts.indexOf(transaction.recipientId) != -1">{{contactNames[contacts.indexOf(transaction.recipientId)]}}</span> 

@@ -23,6 +23,7 @@ import { NewAccountPage } from '../pages/new-account/new-account';
 import { VoteModalPage } from '../pages/vote-modal/vote-modal';
 import { ContactsPage } from '../pages/contacts/contacts';
 import { EditContactModalPage } from '../pages/edit-contact-modal/edit-contact-modal';
+import { TxDetailsModalPage } from '../pages/tx-details-modal/tx-details-modal';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -42,6 +43,7 @@ import { AccountProvider } from '../providers/account/account';
     VoteModalPage,
     ContactsPage,
     EditContactModalPage,
+    TxDetailsModalPage,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +66,7 @@ import { AccountProvider } from '../providers/account/account';
     VoteModalPage,
     ContactsPage,
     EditContactModalPage,
+    TxDetailsModalPage,
   ],
   providers: [
     StatusBar,

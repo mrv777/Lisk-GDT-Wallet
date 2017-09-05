@@ -5,6 +5,7 @@ import { LoginPage } from '../login/login';
 
 import { SendModalPage } from '../send-modal/send-modal';
 import { ReceiveModalPage } from '../receive-modal/receive-modal';
+import { TxDetailsModalPage } from '../tx-details-modal/tx-details-modal';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 
@@ -42,12 +43,15 @@ export class HomePage {
     }
   }
 
-  openModal(modal:string, fullHash:string = null) {
+  openModal(modal:string, tx:string = null) {
     if (modal == 'send') {
       let myModal = this.modalCtrl.create(SendModalPage);
       myModal.present();
-    } else {
+    } else if (modal == 'receive') {
       let myModal = this.modalCtrl.create(ReceiveModalPage);
+      myModal.present();
+    } else { console.log(tx);
+      let myModal = this.modalCtrl.create(TxDetailsModalPage, { tx: tx });
       myModal.present();
     }
   }
