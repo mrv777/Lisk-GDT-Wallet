@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { LoginPage } from '../login/login';
+
+import { AccountDataProvider } from '../../providers/account-data/account-data';
+
 /**
  * Generated class for the AboutPage page.
  *
@@ -20,6 +24,11 @@ export class AboutPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AboutPage');
+  }
+
+  logout() {
+    this.accountData.logout();
+    this.navCtrl.setRoot(LoginPage);
   }
 
 }
