@@ -22,7 +22,7 @@ export class AccountDataProvider {
   KEY_PAIR;
   PUBLIC_KEY;
   NODE_URL;
-  SAVED_PASSWORD = ["","",""];
+  SAVED_PASSWORD = ["","","","",""];
   OPTIONS;
 
   constructor(
@@ -46,6 +46,16 @@ export class AccountDataProvider {
         storage.get('password2')
         .then(
           data => { this.SAVED_PASSWORD[2] = data; },
+          error => console.log(error)
+        );
+        storage.get('password3')
+        .then(
+          data => { this.SAVED_PASSWORD[3] = data; },
+          error => console.log(error)
+        );
+        storage.get('password4')
+        .then(
+          data => { this.SAVED_PASSWORD[4] = data; },
           error => console.log(error)
         );
       });
