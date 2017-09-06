@@ -97,7 +97,7 @@ export class ContactsPage {
 
   logout() {
     this.accountData.logout();
-    this.navCtrl.setRoot('LoginPage');
+    this.navCtrl.setRoot(LoginPage);
   }
 
 }
