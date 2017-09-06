@@ -213,7 +213,7 @@ export class AccountDataProvider {
 	});
   }
 
-  importContacts(uri: string): Promise<string> {
+  importContacts(uri: string): Promise<string> { console.log(uri);
   	let n = uri.lastIndexOf('/');
 	let path = uri.substring(0, n);
 	let file = uri.substring(n + 1);

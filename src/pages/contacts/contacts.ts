@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { FileChooser } from '@ionic-native/file-chooser';
 
+import { LoginPage } from '../login/login';
+
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 import { EditContactModalPage } from '../edit-contact-modal/edit-contact-modal';
 
@@ -76,7 +78,7 @@ export class ContactsPage {
   importContacts(){
   	this.fileChooser.open()
 	  .then((uri) => { 
-	  	this.accountData.importContacts(uri).then((message) => {
+	  	this.accountData.importContacts(uri).then((message) => { console.log("testing: " + message);
 	  		 // Toast Message
 		      let toast = this.toastCtrl.create({
 		        message: message,

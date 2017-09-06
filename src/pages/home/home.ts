@@ -44,7 +44,7 @@ export class HomePage {
       this.accountID = this.accountData.getAccountID();
 	  this.loadTxs();
 	  this.changeCurrency();
-      this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 300000);
+      this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 3000);
     } else {
       console.log("Not logged in");
       this.navCtrl.setRoot(LoginPage);
