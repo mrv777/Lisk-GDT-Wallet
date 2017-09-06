@@ -8,6 +8,7 @@ import { ReceiveModalPage } from '../receive-modal/receive-modal';
 import { TxDetailsModalPage } from '../tx-details-modal/tx-details-modal';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
+import { CurrenciesProvider } from '../../providers/currencies/currencies';
 
 @Component({
   selector: 'page-home',
@@ -25,9 +26,15 @@ export class HomePage {
   contacts: string[];
   contactNames: string[];
 
+  price: number = 0;
+  currency: string = 'usd';
+  currencies: string[] = ['btc','usd','eur','cny'];
+  symbol: string = '$';
+  currencySymbols: string[] = ['฿','$','€','¥'];
+
   subscriptionTx;
 
-  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public modalCtrl: ModalController, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public modalCtrl: ModalController, public currenciesProv: CurrenciesProvider, private toastCtrl: ToastController) {
 
   }
 
@@ -36,6 +43,7 @@ export class HomePage {
       console.log("Logged in");
       this.accountID = this.accountData.getAccountID();
 	  this.loadTxs();
+	  this.changeCurrency();
       this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 300000);
     } else {
       console.log("Not logged in");
@@ -50,7 +58,7 @@ export class HomePage {
     } else if (modal == 'receive') {
       let myModal = this.modalCtrl.create(ReceiveModalPage);
       myModal.present();
-    } else { console.log(tx);
+    } else { 
       let myModal = this.modalCtrl.create(TxDetailsModalPage, { tx: tx });
       myModal.present();
     }
@@ -118,6 +126,18 @@ export class HomePage {
         }
       });
     });  
+  }
+
+  changeCurrency() {
+  	this.symbol = this.currencySymbols[this.currencies.indexOf(this.currency)];
+  	this.currenciesProv.getPrice(this.currency)
+    .subscribe(
+      price => {
+      	if (price[0] != null && price[0][`price_${this.currency}`] != null) {
+      		this.price = price[0][`price_${this.currency}`];
+      	}
+      },
+      err => { console.log(err); });
   }
 
   pageChanged(event){

@@ -29,6 +29,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AccountDataProvider } from '../providers/account-data/account-data';
 import { AccountProvider } from '../providers/account/account';
+import { CurrenciesProvider } from '../providers/currencies/currencies';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { AccountProvider } from '../providers/account/account';
     AccountProvider,
     Screenshot,
     Clipboard,
+    CurrenciesProvider,
   ]
 })
 export class AppModule {}

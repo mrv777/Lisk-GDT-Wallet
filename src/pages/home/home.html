@@ -28,9 +28,14 @@
       <ion-col col-12 col-sm-2 class="hidden-xs">
       </ion-col>
       <ion-col col-12 col-sm-5>
-        <h5>Balance</h5>
-        <h4 *ngIf="account.account != null">{{account.account.balance/100000000 | number : '1.0-8'}}LSK</h4>
+        <h5>Balance <ion-select [(ngModel)]="currency" name="currency" (ionChange)="changeCurrency()">
+          <ion-option *ngFor="let currency of currencies" [value]="currency">
+            {{ currency | uppercase }}
+          </ion-option>
+        </ion-select></h5>
+        <h4 *ngIf="account.account != null">{{account.account.balance/100000000 | number : '1.0-8'}} LSK</h4>
         <h4 *ngIf="account.account == null">0LSK</h4>
+        <h6> ({{symbol}}{{account.account.balance/100000000 * price | number : '1.0-2'}}) </h6>
       </ion-col>
     </ion-row>
   </ion-grid>
