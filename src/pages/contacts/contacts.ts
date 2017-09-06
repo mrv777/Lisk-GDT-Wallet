@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
+import { FileChooser } from '@ionic-native/file-chooser';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 import { EditContactModalPage } from '../edit-contact-modal/edit-contact-modal';
@@ -19,7 +20,7 @@ import { EditContactModalPage } from '../edit-contact-modal/edit-contact-modal';
 export class ContactsPage {
   contacts: object[];
 
-  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public navParams: NavParams, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public navParams: NavParams, public modalCtrl: ModalController, private toastCtrl: ToastController, private fileChooser: FileChooser) {
   }
 
   ionViewDidLoad() {
@@ -54,6 +55,42 @@ export class ContactsPage {
     myModal.onDidDismiss(data => {
       this.loadContacts();
     });
+  }
+
+  exportContacts(){
+  	this.accountData.exportContacts().then((message) => {
+      // Toast Message
+      let toast = this.toastCtrl.create({
+        message: message,
+        duration: 10000,
+        position: 'bottom'
+      });
+      toast.onDidDismiss(() => {
+        console.log('Dismissed toast');
+      });
+
+      toast.present();
+    });
+  }
+
+  importContacts(){
+  	this.fileChooser.open()
+	  .then((uri) => { 
+	  	this.accountData.importContacts(uri).then((message) => {
+	  		 // Toast Message
+		      let toast = this.toastCtrl.create({
+		        message: message,
+		        duration: 10000,
+		        position: 'bottom'
+		      });
+		      toast.onDidDismiss(() => {
+		        console.log('Dismissed toast');
+		      });
+
+		      toast.present();
+	  	});
+	  })
+	  .catch(e => console.log(e));
   }
 
   logout() {

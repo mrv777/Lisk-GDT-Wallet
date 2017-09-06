@@ -23,6 +23,8 @@
         "@ionic-native/barcode-scanner": "^4.2.0",
         "@ionic-native/clipboard": "^4.2.1",
         "@ionic-native/core": "3.12.1",
+        "@ionic-native/file": "^4.2.1",
+        "@ionic-native/file-chooser": "^4.2.1",
         "@ionic-native/fingerprint-aio": "^4.2.0",
         "@ionic-native/screenshot": "^4.2.1",
         "@ionic-native/secure-storage": "^4.2.0",
@@ -37,6 +39,8 @@
         "cordova-plugin-compat": "^1.0.0",
         "cordova-plugin-console": "^1.0.5",
         "cordova-plugin-device": "^1.1.4",
+        "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-filechooser": "^1.0.1",
         "cordova-plugin-fingerprint-aio": "^1.2.1",
         "cordova-plugin-secure-storage": "^2.6.8",
         "cordova-plugin-splashscreen": "^4.0.3",
@@ -70,7 +74,9 @@
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
             "com.darktalker.cordova.screenshot": {},
-            "cordova-clipboard": {}
+            "cordova-clipboard": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-filechooser": {}
         },
         "platforms": [
             "android"

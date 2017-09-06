@@ -7,6 +7,8 @@ import { HomePage } from '../pages/home/home';
 import { VotingPage } from '../pages/voting/voting';
 import { ContactsPage } from '../pages/contacts/contacts';
 import { DelegatePage } from '../pages/delegate/delegate';
+import { AboutPage } from '../pages/about/about';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -28,7 +30,8 @@ export class MyApp {
       { title: 'Home', component: HomePage },
       { title: 'Voting', component: VotingPage },
       { title: 'Contacts', component: ContactsPage },
-      { title: 'Delegate', component: DelegatePage }
+      { title: 'Delegate', component: DelegatePage },
+      { title: 'About', component: AboutPage },
     ];
 
   }

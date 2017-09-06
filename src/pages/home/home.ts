@@ -27,10 +27,10 @@ export class HomePage {
   contactNames: string[];
 
   price: number = 0;
-  currency: string = 'usd';
-  currencies: string[] = ['btc','usd','eur','cny'];
+  currency: string = 'USD';
+  currencies: string[] = ['BTC','ETH','USD','EUR','CNY'];
   symbol: string = '$';
-  currencySymbols: string[] = ['฿','$','€','¥'];
+  currencySymbols: string[] = ['฿','Ξ','$','€','¥'];
 
   subscriptionTx;
 
@@ -130,11 +130,12 @@ export class HomePage {
 
   changeCurrency() {
   	this.symbol = this.currencySymbols[this.currencies.indexOf(this.currency)];
+  	this.price = 0;
   	this.currenciesProv.getPrice(this.currency)
     .subscribe(
       price => {
-      	if (price[0] != null && price[0][`price_${this.currency}`] != null) {
-      		this.price = price[0][`price_${this.currency}`];
+      	if (price != null && price[`${this.currency}`] != null) {
+      		this.price = price[`${this.currency}`];
       	}
       },
       err => { console.log(err); });

@@ -23,7 +23,7 @@
     <ion-row>
       <ion-col col-12 col-sm-5>
         <h5>Address</h5>
-        <h4>{{accountID}}</h4>
+        <h4><b>{{accountID}}</b></h4>
       </ion-col>
       <ion-col col-12 col-sm-2 class="hidden-xs">
       </ion-col>
@@ -33,9 +33,10 @@
             {{ currency | uppercase }}
           </ion-option>
         </ion-select></h5>
-        <h4 *ngIf="account.account != null">{{account.account.balance/100000000 | number : '1.0-8'}} LSK</h4>
-        <h4 *ngIf="account.account == null">0LSK</h4>
-        <h6> ({{symbol}}{{account.account.balance/100000000 * price | number : '1.0-2'}}) </h6>
+        <h4 *ngIf="account.account != null"><b>{{account.account.balance/100000000 | number : '1.0-8'}} LSK</b></h4>
+        <h4 *ngIf="account.account == null"><b>0 LSK</b></h4>
+        <h6 *ngIf="account.account != null"> ({{symbol}}{{account.account.balance/100000000 * price | number : '1.0-2'}}) </h6>
+        <h6 *ngIf="account.account == null"> ({{symbol}}0) </h6>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -3,9 +3,12 @@ import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage';
+import { File } from '@ionic-native/file';
 
 declare var require: any;
 const lisk = require('lisk-js');
+
+declare var cordova: any;
 
 //import { liskjs } from 'lisk-js';
 
@@ -25,7 +28,8 @@ export class AccountDataProvider {
   constructor(
     public events: Events,
     public storage: Storage,
-    private secureStorage: SecureStorage
+    private secureStorage: SecureStorage,
+    private file: File
   ) {
       this.secureStorage.create('lisk_gdt_password')
       .then((storage: SecureStorageObject) => {
@@ -194,6 +198,28 @@ export class AccountDataProvider {
     return this.storage.get(`${this.ACCOUNT_ID}contacts`).then((value) => {
         return value;
     });
+  }
+
+  exportContacts(): Promise<string> {
+  	return this.storage.get(`${this.ACCOUNT_ID}contacts`).then((value) => {
+  		return this.file.writeFile(cordova.file.externalDataDirectory, `${this.ACCOUNT_ID}contacts.txt`, JSON.stringify(value), {replace: true})
+	      .then(function (success) { console.log("success: " + JSON.stringify(success));
+	        // success
+	        return `Saved to ${success['nativeURL']}`;
+	      }, function (error) { console.log("error: " + JSON.stringify(error));
+	        // error
+	        return "Couldn't save contacts";
+	      });
+	});
+  }
+
+  importContacts(uri: string): Promise<string> {
+  	let n = uri.lastIndexOf('/');
+	let path = uri.substring(0, n);
+	let file = uri.substring(n + 1);
+	return this.file.readAsText(path, file).then((text) => {
+		return text;
+	});
   }
 
   setNode(node: string): Promise<void> {

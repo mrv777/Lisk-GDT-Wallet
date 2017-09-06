@@ -18,7 +18,7 @@ export class CurrenciesProvider {
   }
 
   getPrice(currency) : Observable<object> {
-	  return this.http.get(`https://api.coinmarketcap.com/v1/ticker/lisk/?convert=${currency}`)
+	  return this.http.get(`https://min-api.cryptocompare.com/data/price?fsym=LSK&tsyms=${currency}`)
 	    .map((res:Response) => res.json())
 	    .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }

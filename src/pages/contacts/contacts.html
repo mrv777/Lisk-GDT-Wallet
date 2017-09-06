@@ -11,6 +11,12 @@
     </button>
     <ion-title>Contacts</ion-title>
     <ion-buttons end>
+      <button ion-button secondary (click)="exportContacts()">
+        <ion-icon name="cloud-upload"></ion-icon>
+      </button>
+      <button ion-button secondary (click)="importContacts()">
+        <ion-icon name="download"></ion-icon>
+      </button>
       <button ion-button secondary (click)="editContact('','')">
         <ion-icon name="person-add"></ion-icon>
       </button>

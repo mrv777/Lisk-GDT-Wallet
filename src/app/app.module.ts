@@ -8,6 +8,8 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Screenshot } from '@ionic-native/screenshot';
 import { Clipboard } from '@ionic-native/clipboard';
+import { File } from '@ionic-native/file';
+import { FileChooser } from '@ionic-native/file-chooser';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -24,6 +26,7 @@ import { VoteModalPage } from '../pages/vote-modal/vote-modal';
 import { ContactsPage } from '../pages/contacts/contacts';
 import { EditContactModalPage } from '../pages/edit-contact-modal/edit-contact-modal';
 import { TxDetailsModalPage } from '../pages/tx-details-modal/tx-details-modal';
+import { AboutPage } from '../pages/about/about';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -45,6 +48,7 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     ContactsPage,
     EditContactModalPage,
     TxDetailsModalPage,
+    AboutPage,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +72,7 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     ContactsPage,
     EditContactModalPage,
     TxDetailsModalPage,
+    AboutPage,
   ],
   providers: [
     StatusBar,
@@ -81,6 +86,8 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     Screenshot,
     Clipboard,
     CurrenciesProvider,
+    File,
+    FileChooser,
   ]
 })
 export class AppModule {}
