@@ -62,26 +62,43 @@ export class AccountDataProvider {
 
   }
 
-  login(password: string, savePassword: boolean, accountNum: number): void {
-    this.PASSWORD = password;
-    if (savePassword){ 
-      this.secureStorage.create(`lisk_gdt_password`)
-      .then((storage: SecureStorageObject) => {
-        storage.set(`password${accountNum}`, password)
-        .then(
-          data => { this.SAVED_PASSWORD[accountNum] = password; },
-          error => console.log(error)
-        );
-      });
-    }
+  login(password: string, savePassword: boolean, accountNum: number, loginType: string): void {
+    if (loginType == "Account") {
+    	if (savePassword){ 
+	      this.secureStorage.create(`lisk_gdt_password`)
+	      .then((storage: SecureStorageObject) => {
+	        storage.set(`password${accountNum}`, password)
+	        .then(
+	          data => { this.SAVED_PASSWORD[accountNum] = password; },
+	          error => console.log(error)
+	        );
+	      });
+	    }
 
-    this.KEY_PAIR = lisk.crypto.getKeys(password);
-    this.PUBLIC_KEY = this.KEY_PAIR['publicKey'];
+    	this.ACCOUNT_ID = password;
+	    this.storage.set(this.SAVED_ACCOUNTS, password);
+	    this.setAccountID(password);
+    } else {
+	    this.PASSWORD = password;
+	    if (savePassword){ 
+	      this.secureStorage.create(`lisk_gdt_password`)
+	      .then((storage: SecureStorageObject) => {
+	        storage.set(`password${accountNum}`, password)
+	        .then(
+	          data => { this.SAVED_PASSWORD[accountNum] = password; },
+	          error => console.log(error)
+	        );
+	      });
+	    }
 
-    const accountID = lisk.crypto.getAddress(this.PUBLIC_KEY);
-    this.ACCOUNT_ID = accountID;
-    this.storage.set(this.SAVED_ACCOUNTS, accountID);
-    this.setAccountID(accountID);
+	    this.KEY_PAIR = lisk.crypto.getKeys(password);
+	    this.PUBLIC_KEY = this.KEY_PAIR['publicKey'];
+
+	    const accountID = lisk.crypto.getAddress(this.PUBLIC_KEY);
+	    this.ACCOUNT_ID = accountID;
+	    this.storage.set(this.SAVED_ACCOUNTS, accountID);
+	    this.setAccountID(accountID);
+	}
 
     this.getAccount().then((account) => {
 	  	if (account['account'] && account['account']['secondPublicKey'] != null){
@@ -166,11 +183,18 @@ export class AccountDataProvider {
   };
 
   hasLoggedIn(): boolean {
-    if (this.PASSWORD == null)
+    if (this.ACCOUNT_ID == null)
         return false;
     else
         return true;
   };
+
+  wasAccountLogin(): boolean {
+  	if (this.ACCOUNT_ID != null && this.PASSWORD != null)
+        return false;
+    else
+        return true;
+  }
 
   addContact(name: string, account: string): Promise<void> {
     return this.getContacts().then((currentContacts) => {
@@ -267,24 +291,30 @@ export class AccountDataProvider {
     return accountID;
   }
 
-  voteDelegates(delegates: string[], secondPass: string = null): Promise<any> {
+  voteDelegates(delegates: string[], secondPass: string = null, password: string = this.PASSWORD): Promise<any> {
   	let transaction;
+  	if (password == null){
+  		password = this.PASSWORD;
+  	}
   	if (this.HAS_SECOND_PASSWORD) {
-  		transaction = lisk.vote.createVote(this.PASSWORD, delegates, secondPass, 20);
+  		transaction = lisk.vote.createVote(password, delegates, secondPass, 20);
   	} else {
-  		transaction = lisk.vote.createVote(this.PASSWORD, delegates, null, 20);	
+  		transaction = lisk.vote.createVote(password, delegates, null, 20);	
   	}
   	console.log(transaction);
   	return this.broadcastTX(transaction);
   }
 
-  sendLisk(to: string, amount: string, secondPass: string = null): Promise<any> {
+  sendLisk(to: string, amount: string, secondPass: string = null, password: string = this.PASSWORD): Promise<any> {
   	let transaction;
   	let amountNum = parseInt(amount, 10);
+  	if (password == null){
+  		password = this.PASSWORD;
+  	}
   	if (this.HAS_SECOND_PASSWORD) {
-  		transaction = lisk.transaction.createTransaction(to, amountNum, this.PASSWORD, secondPass);
+  		transaction = lisk.transaction.createTransaction(to, amountNum, password, secondPass);
   	} else {
-  		transaction = lisk.transaction.createTransaction(to, amountNum, this.PASSWORD, null);
+  		transaction = lisk.transaction.createTransaction(to, amountNum, password, null);
   	}
   	console.log(transaction);
   	return this.broadcastTX(transaction);

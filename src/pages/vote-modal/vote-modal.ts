@@ -21,9 +21,12 @@ export class VoteModalPage {
   delegatesVoted: string[];
   delegatesVotedNames: string[];
   accountHasSecondPass: boolean = false;
+  disableClose: boolean = false;
   secondPass: string;
   resultTxt: string = '';
   status: number = 0;
+  wasAccountLogin: boolean;
+  password: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner) {
   	if (navParams.get('delegates')) {
@@ -36,6 +39,8 @@ export class VoteModalPage {
 	  		this.accountHasSecondPass = true;
 	  	}
 	  });
+
+	this.wasAccountLogin = this.accountData.wasAccountLogin();
     
   }
 
@@ -43,9 +48,13 @@ export class VoteModalPage {
     
   }
 
-  openBarcodeScanner() {
-    this.barcodeScanner.scan().then((barcodeData) => {
-      this.secondPass = barcodeData['text'];
+  openBarcodeScannerPassword(password: string) {
+  	this.barcodeScanner.scan().then((barcodeData) => {
+      if (password == "password"){
+      	this.password = barcodeData['text'];
+      } else {
+      	this.secondPass = barcodeData['text'];
+      }
     }, (err) => {
         // An error occurred
     });
@@ -53,7 +62,11 @@ export class VoteModalPage {
 
   sendVote() {
   	this.disableVote = true;
-  	this.accountData.voteDelegates(this.delegatesVoted, this.secondPass).then((result) => { console.log(result);
+  	let password;
+    if (this.wasAccountLogin){
+    	password = this.password;
+    }
+  	this.accountData.voteDelegates(this.delegatesVoted, this.secondPass, password).then((result) => { console.log(result);
   		if (result['success'] == false) {
   			this.resultTxt = result['message'];
   			this.disableVote = false;
@@ -61,6 +74,7 @@ export class VoteModalPage {
   		} else {
   			this.status = 1;
   			this.resultTxt = "Submitting vote(s), please wait";
+  			this.disableClose = true;
 		    setTimeout( () => {
 		      this.closeModal(true);
 		 	}, 20000);

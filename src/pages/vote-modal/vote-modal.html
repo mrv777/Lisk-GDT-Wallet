@@ -21,11 +21,17 @@
 			<ion-label stacked color="primary">Votes</ion-label>
 			<ion-textarea [(ngModel)]="delegatesVotedNames" name="delegatesVoted" disabled></ion-textarea>
 		</ion-item>
+		<ion-item *ngIf="wasAccountLogin">
+			<ion-label stacked color="primary">Passphrase</ion-label>
+			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="password">
+			</ion-input>
+			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword('password')"> <ion-icon name="barcode"> </ion-icon> </button>
+		</ion-item>
 		<ion-item *ngIf="accountHasSecondPass">
 			<ion-label stacked color="primary">Second Passphrase</ion-label>
 			<ion-input [(ngModel)]="secondPass" [disabled]="disableVote" name="secondPass" type="password">
 			</ion-input>
-			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
+			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner('second')"> <ion-icon name="barcode"> </ion-icon> </button>
 		</ion-item>
     </ion-list>
 

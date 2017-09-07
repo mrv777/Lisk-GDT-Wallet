@@ -35,11 +35,17 @@
 			<ion-input [(ngModel)]="amount" [disabled]="disableSend" name="amount" type="number" formControlName="amountForm">
 			</ion-input>
 		</ion-item>
+		<ion-item *ngIf="wasAccountLogin">
+			<ion-label stacked color="primary">Passphrase</ion-label>
+			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="password" formControlName="passwordForm">
+			</ion-input>
+			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword('password')"> <ion-icon name="barcode"> </ion-icon> </button>
+		</ion-item>
 		<ion-item *ngIf="accountHasSecondPass">
 			<ion-label stacked color="primary">Second Passphrase</ion-label>
 			<ion-input [(ngModel)]="secondPass" [disabled]="disableSend" name="secondPass" type="password" formControlName="secondForm">
 			</ion-input>
-			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword()"> <ion-icon name="barcode"> </ion-icon> </button>
+			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword('secondPassword')"> <ion-icon name="barcode"> </ion-icon> </button>
 		</ion-item>
     </ion-list>
     <ion-row responsive-sm>

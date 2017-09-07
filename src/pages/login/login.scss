@@ -24,6 +24,28 @@ page-login {
    		max-width: initial;
     }
 
+    .item-button.toggleButtons {
+    	border: 1px solid #3d4db8;
+    	font-size: 1.6em;
+        margin: 0;
+        padding: 0.8em 0.4em;
+        top: 10px;
+    	position: relative;
+    	color: #777;
+    }
+
+    .item-button.toggleButtons.activeToggle {
+    	background-color: #3d4db8;
+    	color: #fff;
+    }
+
+    #passwordButton {
+    	border-radius: 2px 0 0 2px;
+    }
+    #accountButton {
+    	border-radius: 0 2px 2px 0;
+    }
+
     @media(max-width: 1023px){
         #headerLogo {
             width: 192px;

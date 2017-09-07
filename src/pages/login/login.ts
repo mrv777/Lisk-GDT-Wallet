@@ -30,6 +30,10 @@ export class LoginPage {
   fingerAvailable: boolean = true;
   message: string;
   accountNum: number = 1;
+  accountActive: boolean = false;
+  passwordActive: boolean = true;
+  loginLabel: string = "Password";
+  loginType: string = "password";
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder, private faio: FingerprintAIO, public modalCtrl: ModalController, public platform: Platform) {
     this.loginForm = this.formBuilder.group({
@@ -73,9 +77,23 @@ export class LoginPage {
   onLogin() {
     this.disableLogin = true;
     this.accountData.setNode(this.node).then(() => {  
-    	this.accountData.login(this.password, this.savePassword, this.accountNum-1);
+    	this.accountData.login(this.password, this.savePassword, this.accountNum-1, this.loginLabel);
     	this.navCtrl.setRoot(HomePage);
     });
+  }
+
+  toggleLogin(activeButton: string){
+  	this.loginLabel = activeButton;
+  	if (activeButton == "Account") {
+  		this.accountActive = true;
+  		this.passwordActive = false;
+  		this.loginType = 'text';
+  	} else {
+  		this.accountActive = false;
+  		this.passwordActive = true;
+  		this.loginType = 'password';
+  	}
+  	
   }
 
   changeNode() {

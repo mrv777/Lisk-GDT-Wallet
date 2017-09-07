@@ -32,12 +32,15 @@ export class SendModalPage {
   secondPass: string;
   accountHasSecondPass: boolean = false;
   contacts: object[];
+  wasAccountLogin: boolean;
+  password: string;
 
   constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public navParams: NavParams, public viewCtrl: ViewController, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder) {
   	this.sendForm = this.formBuilder.group({
       recipientForm: ['', Validators.required],
       amountForm: ['', Validators.required],
-      secondForm: ['']
+      secondForm: [''],
+      passwordForm: ['']
     });
     if (navParams.get('address')) {
       this.recipient = navParams.get('address');
@@ -47,6 +50,8 @@ export class SendModalPage {
 	  		this.accountHasSecondPass = true;
 	  	}
 	  });
+
+    this.wasAccountLogin = this.accountData.wasAccountLogin();
   }
 
   ionViewDidLoad() {
@@ -58,7 +63,11 @@ export class SendModalPage {
     let amountBig = new Big(this.amount);
     let convertedAmount = new Big(amountBig.times(100000000));
     this.resultTxt = `Attempting to send ${this.recipient} ${amountBig}LSK`;
-    this.accountData.sendLisk(this.recipient, convertedAmount, this.secondPass).then((result) => { console.log(result);
+    let password;
+    if (this.wasAccountLogin){
+    	password = this.password;
+    }
+    this.accountData.sendLisk(this.recipient, convertedAmount, this.secondPass, password).then((result) => { console.log(result);
   		if (result['success'] == false) {
   			this.resultTxt = result['message'];
   			this.disableSend = false;
@@ -83,9 +92,13 @@ export class SendModalPage {
     });
   }
 
-  openBarcodeScannerPassword() {
+  openBarcodeScannerPassword(password: string) {
   	this.barcodeScanner.scan().then((barcodeData) => {
-      this.secondPass = barcodeData['text'];
+      if (password == "password"){
+      	this.password = barcodeData['text'];
+      } else {
+      	this.secondPass = barcodeData['text'];
+      }
     }, (err) => {
         // An error occurred
     });
