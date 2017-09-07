@@ -4,7 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SecureStorage } from '@ionic-native/secure-storage';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
-import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { Screenshot } from '@ionic-native/screenshot';
 import { Clipboard } from '@ionic-native/clipboard';
@@ -46,7 +45,6 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     HttpModule,
-    NgxQRCodeModule,
     NgxPaginationModule,
     VotingPageModule,
     DelegatePageModule,
