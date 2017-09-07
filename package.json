@@ -52,6 +52,7 @@
         "lisk-js": "^0.4.5",
         "ngx-infinite-scroll": "^0.5.1",
         "ngx-pagination": "^3.0.1",
+        "ngx-qrcode2": "0.0.5",
         "phonegap-plugin-barcodescanner": "^6.0.8",
         "rxjs": "5.4.0",
         "sw-toolbox": "3.6.0",

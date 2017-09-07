@@ -41,7 +41,7 @@ export class LoginPage {
       nodeForm: ['', Validators.required],
       nodeSelectForm: [''],
       savePasswordForm: [''],
-      accountNumForm: [''],
+      accountNumForm: ['']
     });
 
     if (this.platform.is('cordova')) {
