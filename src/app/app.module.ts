@@ -5,8 +5,6 @@ import { SecureStorage } from '@ionic-native/secure-storage';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { Screenshot } from '@ionic-native/screenshot';
-import { Clipboard } from '@ionic-native/clipboard';
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 
@@ -73,8 +71,6 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     FingerprintAIO,
     AccountDataProvider,
     AccountProvider,
-    Screenshot,
-    Clipboard,
     CurrenciesProvider,
     File,
     FileChooser,

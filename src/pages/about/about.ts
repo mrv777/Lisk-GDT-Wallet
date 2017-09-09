@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
+import { SendModalPage } from '../send-modal/send-modal';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 
@@ -19,11 +20,18 @@ import { AccountDataProvider } from '../../providers/account-data/account-data';
 })
 export class AboutPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public modalCtrl: ModalController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AboutPage');
+  }
+
+  openModal(modal:string, tx:string = null) {
+    if (modal == 'send') {
+      let myModal = this.modalCtrl.create(SendModalPage, { address: '11380384760969655418L' });
+      myModal.present();
+    }
   }
 
   logout() {

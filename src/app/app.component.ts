@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, ToastController } from 'ionic-angular';
+import { Nav, Platform, ToastController, IonicApp, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -22,7 +22,7 @@ export class MyApp {
 
   backButtonPressedOnceToExit: boolean = false;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private toastCtrl: ToastController) {
+  constructor(public platform: Platform, public statusBar: StatusBar, private menuCtrl: MenuController, private ionicApp: IonicApp, public splashScreen: SplashScreen, private toastCtrl: ToastController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -44,6 +44,25 @@ export class MyApp {
       this.splashScreen.hide();
 
       this.platform.registerBackButtonAction(() => {
+        // if (this.keyboard.isOpen()) { // Handles the keyboard if open
+        //     this.keyboard.close();
+        //     return;
+        // }
+
+        let activePortal = this.ionicApp._loadingPortal.getActive() ||
+           this.ionicApp._modalPortal.getActive() ||
+           this.ionicApp._overlayPortal.getActive();
+    
+        //activePortal is the active overlay like a modal,toast,etc
+        if (activePortal) {
+            activePortal.dismiss();
+            return;
+        }
+        else if (this.menuCtrl.isOpen()) { // Close menu if open
+            this.menuCtrl.close();
+            return;
+        }
+
         if (this.backButtonPressedOnceToExit) {
           this.platform.exitApp();
         } else if (this.nav.canGoBack()) {
@@ -76,6 +95,6 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    this.nav.push(page.component);
   }
 }
