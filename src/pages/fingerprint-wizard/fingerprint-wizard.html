@@ -7,12 +7,49 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>fingerprintWizard</ion-title>
+    <ion-title>Fingerprint Wizard</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+<form [formGroup]="loginForm">
+		<ion-list>			
+			<ion-item>
+				<ion-label stacked color="primary">Type of login to save</ion-label>
+				<ion-select item-end [(ngModel)]="loginType" formControlName="typeForm">
+				    <ion-option value="Password">Passphrase</ion-option>
+				    <ion-option value="Account">Account ID</ion-option>
+				  </ion-select>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked color="primary">{{loginType}}</ion-label>
+				<ion-input [(ngModel)]="password" name="password" type="text" required formControlName="passwordForm" placeholder="{{loginType}}">
+				</ion-input>
+				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
+			</ion-item>
+			<ion-item>
+				<ion-label color="primary">Account to save login to: </ion-label>
+				<ion-select [(ngModel)]="accountNum" formControlName="accountNumForm">
+				    <ion-option value="1">1</ion-option>
+				    <ion-option value="2">2</ion-option>
+				    <ion-option value="3">3</ion-option>
+				    <ion-option value="4">4</ion-option>
+				    <ion-option value="5">5</ion-option>
+				  </ion-select>
+			</ion-item>
+		</ion-list>
 
+		<ion-row responsive-sm>
+			<ion-col>
+				<button ion-button color="secondary" (click)="saveLogin()" type="submit" block>Save</button>
+			</ion-col>
+		</ion-row>
+		<ion-row responsive-sm>
+			<ion-col>
+				<button ion-button (click)="closeModal()" block >Close</button>
+			</ion-col>
+		</ion-row>
+	</form>
 </ion-content>

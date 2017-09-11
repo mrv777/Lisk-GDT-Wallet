@@ -25,6 +25,7 @@ import { ContactsPageModule } from '../pages/contacts/contacts.module';
 import { EditContactModalPageModule } from '../pages/edit-contact-modal/edit-contact-modal.module';
 import { TxDetailsModalPageModule } from '../pages/tx-details-modal/tx-details-modal.module';
 import { AboutPageModule } from '../pages/about/about.module';
+import { FingerprintWizardPageModule } from '../pages/fingerprint-wizard/fingerprint-wizard.module';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -54,13 +55,13 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     EditContactModalPageModule,
     TxDetailsModalPageModule,
     AboutPageModule,
+    FingerprintWizardPageModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
     LoginPage,
-
   ],
   providers: [
     StatusBar,

@@ -62,35 +62,13 @@ export class AccountDataProvider {
 
   }
 
-  login(password: string, savePassword: boolean, accountNum: number, loginType: string): void {
+  login(password: string, accountNum: number, loginType: string): void {
     if (loginType == "Account") {
-    	if (savePassword){ 
-	      this.secureStorage.create(`lisk_gdt_password`)
-	      .then((storage: SecureStorageObject) => {
-	        storage.set(`password${accountNum}`, password)
-	        .then(
-	          data => { this.SAVED_PASSWORD[accountNum] = password; },
-	          error => console.log(error)
-	        );
-	      });
-	    }
-
     	this.ACCOUNT_ID = password;
 	    this.storage.set(this.SAVED_ACCOUNTS, password);
 	    this.setAccountID(password);
     } else {
 	    this.PASSWORD = password;
-	    if (savePassword){ 
-	      this.secureStorage.create(`lisk_gdt_password`)
-	      .then((storage: SecureStorageObject) => {
-	        storage.set(`password${accountNum}`, password)
-	        .then(
-	          data => { this.SAVED_PASSWORD[accountNum] = password; },
-	          error => console.log(error)
-	        );
-	      });
-	    }
-
 	    this.KEY_PAIR = lisk.crypto.getKeys(password);
 	    this.PUBLIC_KEY = this.KEY_PAIR['publicKey'];
 
@@ -108,6 +86,17 @@ export class AccountDataProvider {
     
     this.events.publish('user:login');
   };
+
+  saveSavedPassword(password: string, accountNum: number, loginType: string) {
+  	this.secureStorage.create('lisk_gdt_password')
+      .then((storage: SecureStorageObject) => {
+        storage.set(`password${accountNum}`, password)
+        .then(
+          data => { this.SAVED_PASSWORD[accountNum] = password; },
+          error => console.log(error)
+        );
+      });
+  }
 
   getSavedPassword(accountNum: number): string {
     return this.SAVED_PASSWORD[accountNum];

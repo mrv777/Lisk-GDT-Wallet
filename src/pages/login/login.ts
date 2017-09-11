@@ -7,6 +7,8 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 import { HomePage } from '../home/home';
 import { NewAccountPage } from '../new-account/new-account';
+import { FingerprintWizardPage } from '../fingerprint-wizard/fingerprint-wizard';
+
 
 /**
  * Generated class for the LoginPage page.
@@ -26,7 +28,6 @@ export class LoginPage {
   disableLogin: boolean = false;
   node: string;
   nodeSelect: string;
-  savePassword: boolean = false;
   fingerAvailable: boolean = true;
   message: string;
   accountNum: number = 1;
@@ -40,7 +41,6 @@ export class LoginPage {
       passwordForm: ['', Validators.required],
       nodeForm: ['', Validators.required],
       nodeSelectForm: [''],
-      savePasswordForm: [''],
       accountNumForm: ['']
     });
 
@@ -77,7 +77,7 @@ export class LoginPage {
   onLogin() {
     this.disableLogin = true;
     this.accountData.setNode(this.node).then(() => {  
-    	this.accountData.login(this.password, this.savePassword, this.accountNum-1, this.loginLabel);
+    	this.accountData.login(this.password, this.accountNum-1, this.loginLabel);
     	this.navCtrl.setRoot(HomePage);
     });
   }
@@ -113,12 +113,20 @@ export class LoginPage {
     });
   }
 
-  openModal() {
-    let myModal = this.modalCtrl.create(NewAccountPage);
-    myModal.present();
-    myModal.onDidDismiss(data => {
-      this.password = data;
-    });
+  openModal(modal:string) {
+    if (modal == 'fingerprint') {
+      let myModal = this.modalCtrl.create(FingerprintWizardPage);
+	    myModal.present();
+	    myModal.onDidDismiss(data => {
+	      this.password = data;
+	    });
+    } else { 
+      let myModal = this.modalCtrl.create(NewAccountPage);
+	    myModal.present();
+	    myModal.onDidDismiss(data => {
+	      this.password = data;
+	    });
+    }
   }
 
   showFingerprint() {

@@ -17,15 +17,21 @@
 				</ion-input>
 				
 				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
-				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
 				
 				<button id="passwordButton" class="toggleButtons" [class.activeToggle]="passwordActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Password')"> <ion-icon name="key"> </ion-icon> </button>
 				<button id="accountButton" class="toggleButtons" [class.activeToggle]="accountActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Account')"> <ion-icon name="person"></ion-icon> </button>
 
 			</ion-item>
-			<ion-item *ngIf="fingerAvailable === true" id="savePasswordBox">
-				<ion-label>Save to Fingerprint for Account {{accountNum}}</ion-label>
-    			<ion-checkbox [(ngModel)]="savePassword" formControlName="savePasswordForm"></ion-checkbox>
+			<ion-item *ngIf="fingerAvailable === true">
+				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-left (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
+				<ion-label color="primary">Account to load for Fingerprint: </ion-label>
+				<ion-select [(ngModel)]="accountNum" formControlName="accountNumForm">
+			    <ion-option value="1">1</ion-option>
+			    <ion-option value="2">2</ion-option>
+			    <ion-option value="3">3</ion-option>
+			    <ion-option value="4">4</ion-option>
+			    <ion-option value="5">5</ion-option>
+			  </ion-select>
 			</ion-item>
 		</ion-list>
 		{{message}}
@@ -38,16 +44,6 @@
 					<ion-option value="">Custom</ion-option>
 				</ion-select>
 			</ion-col>
-			<ion-col *ngIf="fingerAvailable === true">
-				<ion-label item-start stacked color="primary">Account for Fingerprint</ion-label>
-				<ion-select item-end [(ngModel)]="accountNum" formControlName="accountNumForm">
-			    <ion-option value="1">1</ion-option>
-			    <ion-option value="2">2</ion-option>
-			    <ion-option value="3">3</ion-option>
-			    <ion-option value="4">4</ion-option>
-			    <ion-option value="5">5</ion-option>
-			  </ion-select>
-		  </ion-col>
 		</ion-row>
 		<ion-row [class.hide]="hideCustom">
 			<ion-input [(ngModel)]="node" name="node" type="text" formControlName="nodeForm" placeholder="URL:PORT of the custom node">
@@ -60,8 +56,11 @@
 			</ion-col>
 		</ion-row>
 		<ion-row responsive-sm>
+			<ion-col *ngIf="fingerAvailable === true">
+				<button ion-button (click)="openModal('fingerprint')" block >Fingerprint Wizard</button>
+			</ion-col>
 			<ion-col>
-				<button ion-button (click)="openModal()" block >Create New Account</button>
+				<button ion-button (click)="openModal('newaccount')" block >Create New Account</button>
 			</ion-col>
 		</ion-row>
 	</form>
