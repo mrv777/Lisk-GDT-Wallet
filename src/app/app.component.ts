@@ -3,6 +3,7 @@ import { Nav, Platform, ToastController, IonicApp, MenuController } from 'ionic-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { VotingPage } from '../pages/voting/voting';
 import { ContactsPage } from '../pages/contacts/contacts';
@@ -16,7 +17,7 @@ import { AboutPage } from '../pages/about/about';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
 
   pages: Array<{title: string, component: any}>;
 

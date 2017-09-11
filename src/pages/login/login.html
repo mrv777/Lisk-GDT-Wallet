@@ -16,14 +16,14 @@
 				<ion-input [(ngModel)]="password" name="password" type="{{loginType}}" required formControlName="passwordForm" placeholder="{{loginLabel}}">
 				</ion-input>
 				
+				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
 				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
 				
 				<button id="passwordButton" class="toggleButtons" [class.activeToggle]="passwordActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Password')"> <ion-icon name="key"> </ion-icon> </button>
 				<button id="accountButton" class="toggleButtons" [class.activeToggle]="accountActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Account')"> <ion-icon name="person"></ion-icon> </button>
 
 			</ion-item>
-			<ion-item *ngIf="fingerAvailable === true">
-				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-left (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
+			<ion-item *ngIf="fingerAvailable === true">			
 				<ion-label color="primary">Account to load for Fingerprint: </ion-label>
 				<ion-select [(ngModel)]="accountNum" formControlName="accountNumForm">
 			    <ion-option value="1">1</ion-option>
