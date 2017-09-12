@@ -17,12 +17,17 @@ import { AccountDataProvider } from '../../providers/account-data/account-data';
   templateUrl: 'delegate.html',
 })
 export class DelegatePage {
+  delegateInfo: object;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad DelegatePage');
+    this.accountData.getDelegate().then((delegateData) => { console.log(delegateData);
+	    if (delegateData['success'] == true) {
+	    	this.delegateInfo = delegateData['delegate'];
+	    }
+	});
   }
 
   logout() {

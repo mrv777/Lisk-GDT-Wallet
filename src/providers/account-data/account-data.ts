@@ -311,10 +311,20 @@ export class AccountDataProvider {
     };
 
     return lisk.api(this.OPTIONS).doPopsicleRequest(request).then(function (result) {
-        console.log(result);
         return result['body'];
     });
 
+  }
+
+  getDelegate(pKey: string = this.PUBLIC_KEY): Promise<any>{
+  	let request = {
+        requestMethod: 'GET',
+        requestUrl: lisk.api(this.OPTIONS).getFullUrl() + '/api/' + `delegates/get?publicKey=${pKey}`,
+    };
+
+    return lisk.api(this.OPTIONS).doPopsicleRequest(request).then(function (result) {
+        return result['body'];
+    });
   }
 
   signTransaction(unsignedTransactionBytes: string): string  {

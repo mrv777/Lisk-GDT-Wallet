@@ -13,5 +13,6 @@
 </ion-header>
 
 <ion-content padding>
-Coming Soon...
+<h3 *ngIf="delegateInfo == null">Account is not a registered delegate.</h3>
+<h3 *ngIf="delegateInfo != null">{{delegateInfo['username']}}</h3>
 </ion-content>
