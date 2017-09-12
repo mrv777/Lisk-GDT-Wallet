@@ -23,6 +23,7 @@ export class AccountDataProvider {
   PUBLIC_KEY;
   NODE_URL;
   SAVED_PASSWORD = ["","","","",""];
+  SAVED_PASSWORD_TYPE = ["","","","",""];
   OPTIONS;
 
   constructor(
@@ -33,31 +34,18 @@ export class AccountDataProvider {
   ) {
       this.secureStorage.create('lisk_gdt_password')
       .then((storage: SecureStorageObject) => {
-        storage.get('password0')
-        .then(
-          data => { this.SAVED_PASSWORD[0] = data; },
-          error => console.log(error)
-        );
-        storage.get('password1')
-        .then(
-          data => { this.SAVED_PASSWORD[1] = data; },
-          error => console.log(error)
-        );
-        storage.get('password2')
-        .then(
-          data => { this.SAVED_PASSWORD[2] = data; },
-          error => console.log(error)
-        );
-        storage.get('password3')
-        .then(
-          data => { this.SAVED_PASSWORD[3] = data; },
-          error => console.log(error)
-        );
-        storage.get('password4')
-        .then(
-          data => { this.SAVED_PASSWORD[4] = data; },
-          error => console.log(error)
-        );
+      	for (let i=0;i<5; i++) {
+      		storage.get(`password${i}`)
+	        .then(
+	          data => { this.SAVED_PASSWORD[i] = data; },
+	          error => console.log(error)
+	        );
+	        storage.get(`passwordType${i}`)
+	        .then(
+	          data => { this.SAVED_PASSWORD_TYPE[i] = data; },
+	          error => console.log(error)
+	        );
+      	}
       });
 
   }
@@ -95,11 +83,16 @@ export class AccountDataProvider {
           data => { this.SAVED_PASSWORD[accountNum] = password; },
           error => console.log(error)
         );
+         storage.set(`passwordType${accountNum}`, loginType)
+        .then(
+          data => { this.SAVED_PASSWORD_TYPE[accountNum] = loginType; },
+          error => console.log(error)
+        );
       });
   }
 
-  getSavedPassword(accountNum: number): string {
-    return this.SAVED_PASSWORD[accountNum];
+  getSavedPassword(accountNum: number): object {
+    return { password: this.SAVED_PASSWORD[accountNum], type: this.SAVED_PASSWORD_TYPE[accountNum] };
   }
 
   logout(): void {

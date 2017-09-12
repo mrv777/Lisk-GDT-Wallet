@@ -135,7 +135,26 @@ export class LoginPage {
       clientSecret: 'gDtLisk2o17Wal!et', //Only necessary for Android
       disableBackup: false  //Only for Android(optional)
     })
-    .then((result: any) => { console.log(result.withFingerprint); this.password = this.accountData.getSavedPassword(this.accountNum-1); } )
+    .then((result: any) => { 
+    	// console.log(result.withFingerprint); 
+    	const savedLogin = this.accountData.getSavedPassword(this.accountNum-1);
+    	if (savedLogin['type'] != null && savedLogin['type'] != '') {
+	    	this.password = savedLogin['password'];
+	    	this.loginLabel = savedLogin['type'];
+    	} else { //Legacy support
+    		this.password = savedLogin['password'];
+    		this.loginLabel = 'Password';
+    	}
+    	if (this.loginLabel == "Account") {
+	  		this.accountActive = true;
+	  		this.passwordActive = false;
+	  		this.loginType = 'text';
+	  	} else {
+	  		this.accountActive = false;
+	  		this.passwordActive = true;
+	  		this.loginType = 'password';
+	  	}
+    })
     .catch((error: any) => console.log(error));
   }
 
