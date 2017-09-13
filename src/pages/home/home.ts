@@ -25,6 +25,7 @@ export class HomePage {
   numToDisplay: number = 10;
   contacts: string[];
   contactNames: string[];
+  recentTxId: number;
 
   price: number = 0;
   currency: string = 'USD';
@@ -44,7 +45,6 @@ export class HomePage {
       this.accountID = this.accountData.getAccountID();
 	  this.loadTxs();
 	  this.changeCurrency();
-      this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 3000);
     } else {
       console.log("Not logged in");
       this.navCtrl.setRoot(LoginPage);
@@ -88,12 +88,23 @@ export class HomePage {
   	this.accountData.getAccountTransactions(this.accountID, this.numToDisplay, (this.numToDisplay * (this.p-1))).then((transactions) => {
 	  	console.log(transactions);
 	  	this.transactions = transactions['transactions'];
+	  	this.recentTxId = this.transactions[0]['id']; // Record the most recent TX id
 	  	this.total = transactions['count'];
 	  	for (let i=0;i < this.transactions.length; i++) {
 	      this.transactions[i]['date'] = new Date((1464109200 + this.transactions[i]['timestamp'])*1000);
 	    } 
 	  	this.transactionsCount = transactions['count'];
+	  	clearInterval(this.subscriptionTx);
+	  	this.subscriptionTx = setInterval(() => { this.loadRecentTX(); }, 2000);
 	  });
+  }
+
+  loadRecentTX() {
+  	this.accountData.getAccountTransactions(this.accountID, 1, 0).then((transactions) => {
+  		if (transactions['transactions'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
+  			this.loadTxs();
+  		}
+  	});
   }
 
   addContact(newAccount: string) {
@@ -145,7 +156,6 @@ export class HomePage {
   	this.p = event;
   	clearInterval(this.subscriptionTx);
   	this.loadTxs();
-  	this.subscriptionTx = setInterval(() => { this.loadTxs(); }, 3000); 
   	console.log(event);
   }
 
