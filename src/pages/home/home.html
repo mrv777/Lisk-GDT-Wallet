@@ -75,7 +75,7 @@
                                                       currentPage: p,
                                                       totalItems: total }">
       <ion-col col-2 col-sm-2>
-        <a (click)="openModal('tx',transaction.id)">{{transaction.date | date:'M/d H:m'}}</a>
+        <a (click)="openModal('tx',transaction.id)">{{transaction.date | date:'M/d H:mm'}}</a>
       </ion-col>
       <ion-col col-0 col-sm-4 col-4 class="hidden-xs">
         <a href="https://explorer.lisk.4miners.net/tx/{{transaction.id}}" target="_blank">{{transaction.id}}</a>
