@@ -58,6 +58,9 @@ export class AccountDataProvider {
   login(password: string, accountNum: number, loginType: string): void {
     if (loginType == "Account") {
     	this.ACCOUNT_ID = password;
+    	this.getAccount(this.ACCOUNT_ID).then((account) => { 
+		  	this.setPublicKey(account['account']['publicKey']);
+		  });
 	    this.storage.set(this.SAVED_ACCOUNTS, password);
 	    this.setAccountID(password);
     } else {
@@ -104,6 +107,14 @@ export class AccountDataProvider {
     this.KEY_PAIR = null;
     this.storage.remove('accountID');
     this.events.publish('user:logout');
+  };
+
+  setPublicKey(pkey: string): void {
+    this.PUBLIC_KEY = pkey;
+  };
+
+  getPublicKey(): string {
+    return this.PUBLIC_KEY;
   };
 
   setAccountID(accountID: string): void {
@@ -161,10 +172,6 @@ export class AccountDataProvider {
   		lisk.api(this.OPTIONS).getTransaction(tx, resolve);
   	});
   }
-  
-  getPublicKey(): string {
-    return this.PUBLIC_KEY;
-  };
 
   hasLoggedIn(): boolean {
     if (this.ACCOUNT_ID == null)
