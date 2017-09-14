@@ -28,7 +28,7 @@ export class LoginPage {
   disableLogin: boolean = false;
   node: string;
   nodeSelect: string;
-  fingerAvailable: boolean = true;
+  fingerAvailable: boolean = false;
   message: string;
   accountNum: number = 1;
   accountActive: boolean = false;
@@ -43,35 +43,40 @@ export class LoginPage {
       nodeSelectForm: [''],
       accountNumForm: ['']
     });
+  }
 
-    if (this.platform.is('cordova')) {
-      this.faio.isAvailable().then((available) => {
-        if (available == 'OK' || available == 'Available') {
-          this.fingerAvailable = true;
-        } else {
-          this.fingerAvailable = false;
-        }
-      });
-    } else {
-    	this.fingerAvailable = false;
-    }
-
-    this.accountData.getNode().then((node) => {
-      if (node == null) {
-        this.node = "mainnet/";
-        this.nodeSelect = "mainnet/";
-        this.hideCustom = true;
-      } else {
-	    this.node = node;
-	    if (this.node == "mainnet/" || this.node == "testnet/") {
-	    	this.hideCustom = true;
-	    	this.nodeSelect = node;
+  ionViewDidLoad() {
+  	this.platform.ready().then((readySource) => {
+	    this.accountData.init();
+	    if (this.platform.is('cordova')) {
+	      this.faio.isAvailable().then((available) => {
+	        if (available == 'OK' || available == 'Available') {
+	          this.fingerAvailable = true;
+	        } else {
+	          this.fingerAvailable = false;
+	        }
+	      });
 	    } else {
-	    	this.hideCustom = false;
-	    	this.nodeSelect = '';
+	    	this.fingerAvailable = false;
 	    }
-      }
-    });
+
+	    this.accountData.getNode().then((node) => {
+	      if (node == null) {
+	        this.node = "mainnet/";
+	        this.nodeSelect = "mainnet/";
+	        this.hideCustom = true;
+	      } else {
+		    this.node = node;
+		    if (this.node == "mainnet/" || this.node == "testnet/") {
+		    	this.hideCustom = true;
+		    	this.nodeSelect = node;
+		    } else {
+		    	this.hideCustom = false;
+		    	this.nodeSelect = '';
+		    }
+	      }
+	    });
+	 });
   }
 
   onLogin() {

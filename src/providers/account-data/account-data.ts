@@ -25,6 +25,7 @@ export class AccountDataProvider {
   SAVED_PASSWORD = ["","","","",""];
   SAVED_PASSWORD_TYPE = ["","","","",""];
   OPTIONS;
+  LOGIN_STORAGE: SecureStorageObject;
 
   constructor(
     public events: Events,
@@ -32,8 +33,13 @@ export class AccountDataProvider {
     private secureStorage: SecureStorage,
     private file: File
   ) {
-      this.secureStorage.create('lisk_gdt_password')
+
+  }
+
+  init() {
+  	this.secureStorage.create('lisk_gdt_password')
       .then((storage: SecureStorageObject) => {
+      	this.LOGIN_STORAGE = storage;
       	for (let i=0;i<5; i++) {
       		storage.get(`password${i}`)
 	        .then(
@@ -47,7 +53,6 @@ export class AccountDataProvider {
 	        );
       	}
       });
-
   }
 
   login(password: string, accountNum: number, loginType: string): void {
@@ -76,19 +81,16 @@ export class AccountDataProvider {
   };
 
   saveSavedPassword(password: string, accountNum: number, loginType: string) {
-  	this.secureStorage.create('lisk_gdt_password')
-      .then((storage: SecureStorageObject) => {
-        storage.set(`password${accountNum}`, password)
-        .then(
-          data => { this.SAVED_PASSWORD[accountNum] = password; },
-          error => console.log(error)
-        );
-         storage.set(`passwordType${accountNum}`, loginType)
-        .then(
-          data => { this.SAVED_PASSWORD_TYPE[accountNum] = loginType; },
-          error => console.log(error)
-        );
-      });
+    this.LOGIN_STORAGE.set(`password${accountNum}`, password)
+    .then(
+      data => { this.SAVED_PASSWORD[accountNum] = password; },
+      error => console.log(error)
+    );
+     this.LOGIN_STORAGE.set(`passwordType${accountNum}`, loginType)
+    .then(
+      data => { this.SAVED_PASSWORD_TYPE[accountNum] = loginType; },
+      error => console.log(error)
+    );
   }
 
   getSavedPassword(accountNum: number): object {
