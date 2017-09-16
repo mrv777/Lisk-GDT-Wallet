@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavController, NavParams, ModalController, Platform } from 'ionic-angular';
+import { NavController, NavParams, ModalController, Platform, Select } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 
@@ -22,6 +22,7 @@ import { FingerprintWizardPage } from '../fingerprint-wizard/fingerprint-wizard'
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  @ViewChild('selectAccount') selectAccount: Select;
   private loginForm : FormGroup;
   password: string = '';
   hideCustom: boolean;
@@ -45,7 +46,7 @@ export class LoginPage {
     });
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad() { 
   	this.platform.ready().then((readySource) => {
 	    this.accountData.init();
 	    if (this.platform.is('cordova')) {
@@ -132,6 +133,10 @@ export class LoginPage {
 	      this.password = data;
 	    });
     }
+  }
+
+  openSelectAccount() {
+    this.selectAccount.open();
   }
 
   showFingerprint() {

@@ -1,15 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
-import { Screenshot } from '@ionic-native/screenshot';
+// import { Screenshot } from '@ionic-native/screenshot';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
-
-/**
- * Generated class for the NewAccountPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -24,7 +17,7 @@ export class NewAccountPage {
   accountID: string;
   saved: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController, private screenshot: Screenshot, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController, private toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -43,33 +36,33 @@ export class NewAccountPage {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  save() {
-  	this.saved = true;
-    this.screenshot.save('jpg', 80).then(res => { 
-      console.log(res.filePath);
-      this.showToast(`Screenshot of account and passphrase saved to your photos.`);
-    })
-    .catch(() => {
-    	console.error("screenshot error");
-    	this.showToast(`Error saving screenshot of account and passphrase.`);
-    });
+  // save() {
+  // 	this.saved = true;
+  //   this.screenshot.save('jpg', 80).then(res => { 
+  //     console.log(res.filePath);
+  //     this.showToast(`Screenshot of account and passphrase saved to your photos.`);
+  //   })
+  //   .catch(() => {
+  //   	console.error("screenshot error");
+  //   	this.showToast(`Error saving screenshot of account and passphrase.`);
+  //   });
     
-  }
+  // }
 
-  showToast(message: string) {
-    let toast = this.toastCtrl.create({
-      message: message,
-      showCloseButton: true,
-      closeButtonText: 'ok',
-      position: 'bottom'
-    });
+  // showToast(message: string) {
+  //   let toast = this.toastCtrl.create({
+  //     message: message,
+  //     showCloseButton: true,
+  //     closeButtonText: 'ok',
+  //     position: 'bottom'
+  //   });
 
-    toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
-    });
+  //   toast.onDidDismiss(() => {
+  //     console.log('Dismissed toast');
+  //   });
 
-    toast.present();
-  }
+  //   toast.present();
+  // }
 
   closeModal() {
     this.viewCtrl.dismiss(this.passphrase);

@@ -19,7 +19,7 @@ import { AccountDataProvider } from '../../providers/account-data/account-data';
 })
 export class FingerprintWizardPage {
   private loginForm : FormGroup;
-  loginType: string = "Password";
+  loginType: string = "Account";
   password: string;
   accountNum: number = 1;
 
@@ -32,7 +32,7 @@ export class FingerprintWizardPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FingerprintWizardPage');
+
   }
 
   openBarcodeScanner() {

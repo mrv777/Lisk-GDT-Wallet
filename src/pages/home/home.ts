@@ -95,7 +95,7 @@ export class HomePage {
 	    } 
 	  	this.transactionsCount = transactions['count'];
 	  	clearInterval(this.subscriptionTx);
-	  	this.subscriptionTx = setInterval(() => { this.loadRecentTX(); }, 2000);
+	  	this.subscriptionTx = setInterval(() => { this.loadRecentTX(); }, 3000);
 	  });
   }
 

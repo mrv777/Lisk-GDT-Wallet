@@ -19,9 +19,12 @@
 			<ion-item>
 				<ion-label stacked color="primary">Type of login to save</ion-label>
 				<ion-select item-end [(ngModel)]="loginType" formControlName="typeForm">
-				    <ion-option value="Password">Passphrase</ion-option>
 				    <ion-option value="Account">Account ID</ion-option>
+				    <ion-option value="Password">Passphrase</ion-option>
 				  </ion-select>
+			</ion-item>
+			<ion-item text-wrap *ngIf="loginType == 'Password'" style="color: red">
+				If your device gets stolen or lost, it is recommended to transfer your balances out of all accounts that have saved passphrases on the device.
 			</ion-item>
 			<ion-item>
 				<ion-label stacked color="primary">{{loginType}}</ion-label>
