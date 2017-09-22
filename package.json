@@ -20,32 +20,33 @@
         "@angular/http": "4.1.3",
         "@angular/platform-browser": "4.1.3",
         "@angular/platform-browser-dynamic": "4.1.3",
-        "@ionic-native/barcode-scanner": "^4.2.0",
+        "@ionic-native/barcode-scanner": "^4.2.1",
         "@ionic-native/clipboard": "^4.2.1",
-        "@ionic-native/core": "3.12.1",
+        "@ionic-native/core": "^4.2.1",
         "@ionic-native/file": "^4.2.1",
         "@ionic-native/file-chooser": "^4.2.1",
         "@ionic-native/fingerprint-aio": "^4.2.0",
         "@ionic-native/screenshot": "^4.2.1",
-        "@ionic-native/secure-storage": "^4.2.0",
-        "@ionic-native/splash-screen": "3.12.1",
-        "@ionic-native/status-bar": "3.12.1",
+        "@ionic-native/secure-storage": "^4.2.1",
+        "@ionic-native/splash-screen": "^4.2.1",
+        "@ionic-native/status-bar": "^4.2.1",
         "@ionic/storage": "2.0.1",
         "@techiediaries/ngx-qrcode": "0.0.5",
         "com.darktalker.cordova.screenshot": "^0.1.6",
         "cordova-android": "^6.2.3",
         "cordova-clipboard": "^1.0.0",
-        "cordova-plugin-add-swift-support": "file:node_modules\\cordova-plugin-add-swift-support",
-        "cordova-plugin-compat": "^1.0.0",
-        "cordova-plugin-console": "^1.0.5",
-        "cordova-plugin-device": "^1.1.4",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-add-swift-support": "^1.7.0",
+        "cordova-plugin-compat": "^1.1.0",
+        "cordova-plugin-console": "^1.0.7",
+        "cordova-plugin-device": "^1.1.6",
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-filechooser": "^1.0.1",
-        "cordova-plugin-fingerprint-aio": "^1.2.1",
+        "cordova-plugin-fingerprint-aio": "git+https://github.com/NiklasMerz/cordova-plugin-fingerprint-aio.git",
         "cordova-plugin-secure-storage": "^2.6.8",
         "cordova-plugin-splashscreen": "^4.0.3",
-        "cordova-plugin-statusbar": "^2.2.2",
-        "cordova-plugin-whitelist": "^1.3.1",
+        "cordova-plugin-statusbar": "^2.2.3",
+        "cordova-plugin-whitelist": "^1.3.2",
         "ionic-angular": "^3.6.1",
         "ionic-plugin-keyboard": "^2.2.1",
         "ionicons": "3.0.0",
@@ -54,13 +55,14 @@
         "ngx-pagination": "^3.0.1",
         "ngx-qrcode2": "0.0.5",
         "phonegap-plugin-barcodescanner": "^6.0.8",
-        "rxjs": "5.4.0",
+        "rxjs": "5.4.2",
         "sw-toolbox": "3.6.0",
         "zone.js": "0.8.12"
     },
     "devDependencies": {
         "@ionic/app-scripts": "^2.1.4",
-        "typescript": "2.3.4"
+        "typescript": "2.5.2",
+        "ionic": "3.12.0"
     },
     "description": "An Ionic project",
     "cordova": {
@@ -80,7 +82,8 @@
             "cordova-plugin-filechooser": {}
         },
         "platforms": [
-            "android"
+            "android",
+            "ios"
         ]
     }
 }
