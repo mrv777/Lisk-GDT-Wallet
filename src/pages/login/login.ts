@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController, NavParams, ModalController, Platform, Select } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { PinDialog } from '@ionic-native/pin-dialog';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 import { HomePage } from '../home/home';
@@ -30,6 +31,7 @@ export class LoginPage {
   node: string;
   nodeSelect: string;
   fingerAvailable: boolean = false;
+  cordovaAvailable: boolean = false;
   message: string;
   accountNum: number = 1;
   accountActive: boolean = false;
@@ -37,7 +39,7 @@ export class LoginPage {
   loginLabel: string = "Password";
   loginType: string = "password";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder, private faio: FingerprintAIO, public modalCtrl: ModalController, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder, private faio: FingerprintAIO, public modalCtrl: ModalController, public platform: Platform, private pinDialog: PinDialog) {
     this.loginForm = this.formBuilder.group({
       passwordForm: ['', Validators.required],
       nodeForm: ['', Validators.required],
@@ -50,6 +52,7 @@ export class LoginPage {
   	this.platform.ready().then((readySource) => {
 	    this.accountData.init();
 	    if (this.platform.is('cordova')) {
+        this.cordovaAvailable = true;
 	      this.faio.isAvailable().then((available) => {
 	        if (available == 'OK' || available == 'Available') {
 	          this.fingerAvailable = true;
@@ -137,6 +140,16 @@ export class LoginPage {
 
   openSelectAccount() {
     this.selectAccount.open();
+  }
+
+  showPinDialog() {
+    this.pinDialog.prompt('Enter your PIN', 'Verify PIN', ['OK', 'Cancel'])
+    .then(
+      (result: any) => {
+        if (result.buttonIndex == 1) this.message = 'User clicked OK, value is: '+ result.input1;
+        else if(result.buttonIndex == 2) this.message = 'User cancelled';
+      }
+    );
   }
 
   showFingerprint() {

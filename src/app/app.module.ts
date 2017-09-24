@@ -7,6 +7,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
+import { PinDialog } from '@ionic-native/pin-dialog';
 
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpModule } from '@angular/http';
@@ -75,6 +76,7 @@ import { CurrenciesProvider } from '../providers/currencies/currencies';
     CurrenciesProvider,
     File,
     FileChooser,
+    PinDialog,
   ]
 })
 export class AppModule {}
