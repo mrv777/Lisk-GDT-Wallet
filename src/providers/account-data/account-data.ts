@@ -24,6 +24,7 @@ export class AccountDataProvider {
   NODE_URL;
   SAVED_PASSWORD = ["","","","",""];
   SAVED_PASSWORD_TYPE = ["","","","",""];
+  PIN;
   OPTIONS;
   LOGIN_STORAGE: SecureStorageObject;
 
@@ -40,6 +41,11 @@ export class AccountDataProvider {
   	this.secureStorage.create('lisk_gdt_password')
       .then((storage: SecureStorageObject) => {
       	this.LOGIN_STORAGE = storage;
+        storage.get(`pin`) // Get pin if it's saved
+        .then(
+          data => { this.PIN = data; },
+          error => console.log(error)
+        );
       	for (let i=0;i<5; i++) {
       		storage.get(`password${i}`)
 	        .then(
@@ -98,6 +104,22 @@ export class AccountDataProvider {
 
   getSavedPassword(accountNum: number): object {
     return { password: this.SAVED_PASSWORD[accountNum], type: this.SAVED_PASSWORD_TYPE[accountNum] };
+  }
+
+  checkPin(pin: string): boolean {
+    if (this.PIN === pin) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setPin(pin: string) {
+    this.LOGIN_STORAGE.set('pin', pin)
+    .then(
+      data => { this.PIN = pin; },
+      error => console.log(error)
+    );
   }
 
   logout(): void {

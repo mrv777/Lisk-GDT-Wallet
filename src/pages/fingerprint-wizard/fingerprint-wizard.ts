@@ -5,13 +5,6 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 
-/**
- * Generated class for the FingerprintWizardPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-fingerprint-wizard',
