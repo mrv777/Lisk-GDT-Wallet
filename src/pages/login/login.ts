@@ -143,7 +143,7 @@ export class LoginPage {
   }
 
   showPinDialog() {
-    this.pinDialog.prompt('Enter your PIN', 'Verify PIN', ['OK', 'Cancel'])
+    this.pinDialog.prompt('Enter your PIN', '', ['OK', 'Cancel'])
     .then(
       (result: any) => {
         if (result.buttonIndex == 1) this.message = 'User clicked OK, value is: '+ result.input1;

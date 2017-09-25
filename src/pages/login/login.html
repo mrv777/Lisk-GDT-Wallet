@@ -17,15 +17,15 @@
 				</ion-input>
 				
 				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="openSelectAccount()"> <ion-icon name="finger-print"></ion-icon> </button>
-				<button id="pinIcon" *ngIf="cordovaAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showPinDialog()"> <ion-icon name="grid"></ion-icon> </button>
+				<button id="pinIcon" *ngIf="fingerAvailable !== true && cordovaAvailable === true" ion-button clear color="dark" type="button" item-right (click)="showPinDialog()"> <ion-icon name="grid"></ion-icon> </button>
 				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
 				
 				<button id="passwordButton" class="toggleButtons" [class.activeToggle]="passwordActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Password')"> <ion-icon name="key"> </ion-icon> </button>
 				<button id="accountButton" class="toggleButtons" [class.activeToggle]="accountActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Account')"> <ion-icon name="person"></ion-icon> </button>
 
 			</ion-item>
-			<ion-item *ngIf="fingerAvailable === true" style="display:none">			
-				<ion-label color="primary">Account to load for Fingerprint: </ion-label>
+			<ion-item style="display:none">			
+				<ion-label color="primary">Account to load for login: </ion-label>
 				<ion-select #selectAccount (ionChange)="showFingerprint()" [(ngModel)]="accountNum" formControlName="accountNumForm">
 			    <ion-option value="1">1</ion-option>
 			    <ion-option value="2">2</ion-option>
@@ -59,6 +59,9 @@
 		<ion-row responsive-sm>
 			<ion-col *ngIf="fingerAvailable === true">
 				<button ion-button (click)="openModal('fingerprint')" block >Fingerprint Wizard</button>
+			</ion-col>
+			<ion-col *ngIf="fingerAvailable === false">
+				<button ion-button (click)="openModal('pin')" block >Pin Login Wizard</button>
 			</ion-col>
 			<ion-col>
 				<button ion-button (click)="openModal('newaccount')" block >Create New Account</button>
