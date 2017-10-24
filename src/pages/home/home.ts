@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, ToastController } from 'ionic-angular';
+import { NavController, ModalController, PopoverController } from 'ionic-angular';
 
 import { LoginPage } from '../login/login';
 
-import { SendModalPage } from '../send-modal/send-modal';
-import { ReceiveModalPage } from '../receive-modal/receive-modal';
-import { TxDetailsModalPage } from '../tx-details-modal/tx-details-modal';
+import { SendTabPage } from '../send-tab/send-tab';
+import { ReceiveTabPage } from '../receive-tab/receive-tab';
+import { TransactionsTabPage } from '../transactions-tab/transactions-tab';
+import { AccountMenuPage } from '../account-menu/account-menu';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
 import { CurrenciesProvider } from '../../providers/currencies/currencies';
@@ -16,7 +17,9 @@ import { CurrenciesProvider } from '../../providers/currencies/currencies';
 })
 export class HomePage {
 
+  guest: boolean = false;
   accountID: string;
+  accountName: string;
   account: object;
   transactions: object[];
   transactionsCount: number;
@@ -27,23 +30,39 @@ export class HomePage {
   contactNames: string[];
   recentTxId: number;
 
+  txSelected: boolean = true;
+  sendSelected: boolean = false;
+  receiveSelected: boolean = false;
+
   price: number = 0;
   currency: string = 'USD';
   currencies: string[] = ['BTC','ETH','USD','EUR','CNY'];
   symbol: string = '$';
   currencySymbols: string[] = ['฿','Ξ','$','€','¥'];
 
-  subscriptionTx;
+  subscriptionAccount;
 
-  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public modalCtrl: ModalController, public currenciesProv: CurrenciesProvider, private toastCtrl: ToastController) {
+  message;
+
+  private rootPage = TransactionsTabPage;
+  private txPage = TransactionsTabPage;
+  private sendPage = SendTabPage;
+  private receivePage = ReceiveTabPage;
+
+  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public modalCtrl: ModalController, public currenciesProv: CurrenciesProvider, public popoverCtrl: PopoverController) {
 
   }
 
   ionViewDidLoad() {
     if (this.accountData.hasLoggedIn()) {
+      this.guest = this.accountData.isGuestLogin();
       console.log("Logged in");
       this.accountID = this.accountData.getAccountID();
-	  this.loadTxs();
+      this.accountName = this.accountData.getAccountName();
+      if (!this.accountName || this.accountName == null || this.accountName == 'undefined') {
+      	this.accountName = 'Lisk GDT Wallet';
+      }
+      this.loadBalance();
 	  this.changeCurrency();
     } else {
       console.log("Not logged in");
@@ -51,92 +70,57 @@ export class HomePage {
     }
   }
 
-  openModal(modal:string, tx:string = null) {
-    if (modal == 'send') {
-      let myModal = this.modalCtrl.create(SendModalPage);
-      myModal.present();
-    } else if (modal == 'receive') {
-      let myModal = this.modalCtrl.create(ReceiveModalPage);
-      myModal.present();
-    } else { 
-      let myModal = this.modalCtrl.create(TxDetailsModalPage, { tx: tx });
-      myModal.present();
+  openPage(page) {
+    // Reset the nav controller to have just this page
+    // we wouldn't want the back button to show in this scenario
+    this.rootPage = page;
+    if (page == this.txPage) {
+    	this.txSelected = true;
+    	this.sendSelected = false;
+    	this.receiveSelected = false;
+    } else if (page  == this.sendPage) {
+    	this.txSelected = false;
+    	this.sendSelected = true;
+    	this.receiveSelected = false;
+    } else {
+    	this.txSelected = false;
+    	this.sendSelected = false;
+    	this.receiveSelected = true;
     }
   }
 
-  loadTxs() {
-  	this.accountData.getContacts().then((currentContacts) => {
-        if (currentContacts != null) {
-          this.contacts = [];
-          this.contactNames = [];
-          for (let i=0;i < currentContacts.length; i++) {
-            this.contacts.push(currentContacts[i]['account']);
-            if (currentContacts[i]['name'] != '') {
-              this.contactNames.push(currentContacts[i]['name']);
-            } else {
-              this.contactNames.push(currentContacts[i]['account']);
-            }
-          }
-        } else {
-          this.contacts = [''];
-          this.contactNames = [''];
-        }
-      });
-  	this.accountData.getAccount(this.accountID).then((account) => { console.log(account);
+  loadBalance() {
+  	this.accountData.getAccount(this.accountID).then((account) => {
 	  	this.account = account;
-	  });
-  	this.accountData.getAccountTransactions(this.accountID, this.numToDisplay, (this.numToDisplay * (this.p-1))).then((transactions) => {
-	  	console.log(transactions);
-	  	this.transactions = transactions['transactions'];
-	  	this.recentTxId = this.transactions[0]['id']; // Record the most recent TX id
-	  	this.total = transactions['count'];
-	  	for (let i=0;i < this.transactions.length; i++) {
-	      this.transactions[i]['date'] = new Date((1464109200 + this.transactions[i]['timestamp'])*1000);
-	    } 
-	  	this.transactionsCount = transactions['count'];
-	  	clearInterval(this.subscriptionTx);
-	  	this.subscriptionTx = setInterval(() => { this.loadRecentTX(); }, 3000);
+	  	clearInterval(this.subscriptionAccount);
+	  	this.subscriptionAccount = setInterval(() => { this.loadRecentTX(); }, 3000);
 	  });
   }
 
   loadRecentTX() {
   	this.accountData.getAccountTransactions(this.accountID, 1, 0).then((transactions) => {
-  		if (transactions['transactions'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
-  			this.loadTxs();
+  		if (transactions['transactions'][0] && transactions['transactions'][0]['id'] && transactions['transactions'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
+  			this.loadBalance();
+  		}
+  		if (transactions['transactions'][0] && transactions['transactions'][0]['id']) {
+  			this.recentTxId = transactions['transactions'][0]['id'];
   		}
   	});
   }
 
-  addContact(newAccount: string) {
-    this.accountData.addContact('',newAccount).then(() => {
-      let toast = this.toastCtrl.create({
-        message: 'Contact Added',
-        duration: 3000,
-        position: 'bottom'
-      });
-      toast.onDidDismiss(() => {
-        console.log('Dismissed toast');
-      });
+  presentPopover(myEvent, account, name) {
+    let popover = this.popoverCtrl.create(AccountMenuPage);
+    popover.present({
+      ev: myEvent,
 
-      toast.present();
-      this.accountData.getContacts().then((currentContacts) => {
-        if (currentContacts != null) {
-          this.contacts = [];
-          this.contactNames = [];
-          for (let i=0;i < currentContacts.length; i++) {
-            this.contacts.push(currentContacts[i]['account']);
-            if (currentContacts[i]['name'] != '') {
-              this.contactNames.push(currentContacts[i]['name']);
-            } else {
-              this.contactNames.push(currentContacts[i]['account']);
-            }
-          }
-        } else {
-          this.contacts = [''];
-          this.contactNames = [''];
-        }
-      });
-    });  
+    });
+    popover.onDidDismiss(data => {
+      if (data == 'remove') {
+      	this.logout();
+  	  } else {
+  	  	this.accountName = this.accountData.getAccountName();
+  	  }
+    });
   }
 
   changeCurrency() {
@@ -152,20 +136,13 @@ export class HomePage {
       err => { console.log(err); });
   }
 
-  pageChanged(event){
-  	this.p = event;
-  	clearInterval(this.subscriptionTx);
-  	this.loadTxs();
-  	console.log(event);
-  }
-
   logout() {
     this.accountData.logout();
     this.navCtrl.setRoot(LoginPage);
   }
 
   ionViewDidLeave() { 
-  	clearInterval(this.subscriptionTx);
+  	clearInterval(this.subscriptionAccount);
   }
 
 }

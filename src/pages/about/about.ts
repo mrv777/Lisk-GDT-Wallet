@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 
-import { LoginPage } from '../login/login';
 import { SendModalPage } from '../send-modal/send-modal';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
@@ -32,11 +31,6 @@ export class AboutPage {
       let myModal = this.modalCtrl.create(SendModalPage, { address: '11380384760969655418L' });
       myModal.present();
     }
-  }
-
-  logout() {
-    this.accountData.logout();
-    this.navCtrl.setRoot(LoginPage);
   }
 
 }

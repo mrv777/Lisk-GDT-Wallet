@@ -2,4 +2,21 @@ page-about {
 	.header button {
         font-size: 1.5em;
     }
+
+    .scroll-content, .scroll-content a {
+        background-color: #5364d5;
+        text-align: center;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .scroll-content p {
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.75);
+    }
+
+    #donateButton {
+        background-color: #fff;
+        color: #5364d5;
+    }
 }

@@ -8,6 +8,10 @@ page-voting {
     	margin: auto;
     }
 
+    #vote {
+        background-color: #f57c00;
+    }
+
 	@media(max-width: 575px){
         .hidden-xs {
             display:none;

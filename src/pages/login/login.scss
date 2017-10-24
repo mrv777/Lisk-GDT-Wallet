@@ -9,12 +9,110 @@ page-login {
     	position: relative;
     }
 
+    .grid {
+        justify-content: center !important;
+        height: 90%;
+    }
+
     #loginLogo {
-        background: #3d4db8;
+        background: #5364d5;
         text-align: center;
         margin: -16px -16px 2px -16px;
         padding: 2em;
     }
+
+    #loginText {
+        background: #5364d5;
+        text-align: left;
+        margin: -16px -16px 2px -16px;
+        padding: 2em;
+        font-size: 2rem;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    button[ion-fab] {
+        overflow: visible;
+        position: relative;
+
+        ion-label {
+            position: absolute;
+            top: -8px;
+            right: 40px;
+
+            color: white;
+            background-color: rgba(0,0,0,0.7);
+            line-height: 24px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+    }
+    .fab {
+        contain: layout;
+    }
+    #langFabList {
+        margin: 54px 0;
+    }
+    #langFabList button[ion-fab] {
+
+        ion-label {
+            left: 45px;
+            right: inherit;
+        }
+    }
+    #langFabList .fab-in-list {
+        margin: 4px 0;
+    }
+
+    #importButton {
+        background-color: #fff;
+        color: #5364d5;
+        font-weight: bold;
+    }
+
+    button#mainFab {
+        background-color: #f57c00;
+    }
+
+    #guestLogin, #offlineTx {
+        text-align: center;
+    }
+
+    #guestLogin a, #offlineTx a {
+        color: #fff;
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    #newAccountButton {
+        background-color: #fff;
+        color: #58B802;
+        font-weight: bold;
+    }
+
+    .accountBalance {
+        float: right;
+        color: #3D4DB8;
+        font-size: 18px;
+    }
+    .lskCurrency {
+        font-size: 14px;
+        color: #ccc;
+    }
+
+    .scroll-content {
+        background-color: #5364d5;
+    }
+
+    #loader {
+        margin: auto;
+        text-align: center;
+        color: #fff;
+        font-size: 24px;
+    }
+
+
 
     #savePasswordBox .item-inner {
         border: none;

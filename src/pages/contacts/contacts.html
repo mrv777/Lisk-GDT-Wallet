@@ -9,7 +9,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Contacts</ion-title>
+    <ion-title>{{ 'CONTACTS' | translate }}</ion-title>
     <ion-buttons end>
       <!-- <button ion-button secondary (click)="exportContacts()">
         Export
@@ -17,29 +17,28 @@
       <button ion-button secondary (click)="importContacts()">
         Import
       </button> -->
-      <button ion-button secondary (click)="editContact('','')">
-        <ion-icon name="person-add"></ion-icon>
-      </button>
-      <button ion-button secondary (click)="logout()">
-        <ion-icon name="power"></ion-icon>
-      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding *ngIf="!guest">
    <ion-list *ngIf="contacts != null">
     <ion-item *ngFor="let contact of contacts">
-      <label *ngIf="contact.name != ''">{{contact.name}}  
-        <button ion-button clear color="dark" type="button" (click)="editContact(contact.name,contact.account)"><ion-icon name="create"></ion-icon></button> 
-        <button ion-button clear color="dark" type="button" (click)="removeContact(contact.account)"><ion-icon name="trash"></ion-icon></button> 
+      <label *ngIf="contact.name != ''" (click)="presentPopover($event, contact.account, contact.name)">{{contact.name}}<br /><span class="smallTxt">{{contact.account}}</span> 
+        
       </label>
-      <label *ngIf="contact.name == ''">{{contact.account}} 
-        <button ion-button clear color="dark" type="button" (click)="editContact(contact.name,contact.account)"><ion-icon name="create"></ion-icon></button> 
-        <button ion-button clear color="dark" type="button" (click)="removeContact(contact.account)"><ion-icon name="trash"></ion-icon></button>
+      <label *ngIf="contact.name == ''" (click)="presentPopover($event, contact.account, '')">{{contact.account}} 
+
       </label>
     </ion-item>
   </ion-list> 
-  <h4 *ngIf="contacts == null">No Contacts</h4>
+  <h4 *ngIf="contacts == null" style="text-align: center;">{{ 'NO_CONTACTS' | translate }}</h4>
+  <ion-fab right bottom>
+    <button (click)="editContact('','','new')" ion-fab><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>
+
+<ion-content padding *ngIf="guest" style="text-align: center;">
+	<h4 style="text-align: center;">{{ 'CONTACTS_NOT_ALLOWED' | translate }}</h4>
 </ion-content>

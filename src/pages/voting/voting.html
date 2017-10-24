@@ -3,53 +3,38 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Voting</ion-title>
+    <ion-title>{{ 'VOTING' | translate }}</ion-title>
     <ion-buttons end>
-      <button ion-button secondary (click)="logout()">
-        <ion-icon name="power"></ion-icon>
-      </button>
+      <ion-title>{{votedDelegates.length-1}}/101 (Δ{{updateVotesArray.length-1}})</ion-title>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-<ion-grid>
-	<ion-row>
-		<ion-col col-4 col-sm-3>
-			<h4>Votes: {{votedDelegates.length-1}}/101 (Δ{{updateVotesArray.length-1}})</h4>
-		</ion-col>
-		<ion-col col-8 col-sm-6>
-			<button ion-button (click)="voteGDT()" block >Vote all GDT</button>
-		</ion-col>
-		<ion-col col-12 col-sm-3>
-			<button ion-button (click)="voteSelected()" block >Vote for selected</button>
-		</ion-col>
-	</ion-row>
-</ion-grid>
 <ion-grid id="txTable">
     <ion-row>
       <ion-col col-2 col-sm-1>
       </ion-col>
       <ion-col col-3 col-sm-1>
-        <h4>Rank</h4>
+        <h4>{{ 'RANK' | translate }}</h4>
       </ion-col>
       <ion-col col-7 col-sm-3>
-        <h4>Name</h4>
+        <h4>{{ 'NAME' | translate }}</h4>
       </ion-col>
       <ion-col col-sm-3 class="hidden-xs">
-        <h4>Address</h4>
+        <h4>{{ 'ACCOUNT' | translate }}</h4>
       </ion-col>
       <ion-col col-sm-2 class="hidden-xs">
-        <h4>Uptime</h4>
+        <h4>{{ 'UPTIME' | translate }}</h4>
       </ion-col>
       <ion-col col-sm-2 class="hidden-xs">
-        <h4>Approval</h4>
+        <h4>{{ 'APPROVAL' | translate }}</h4>
       </ion-col>
     </ion-row>
     <ion-row *ngIf="shownDelegates == null">
       <ion-col col-12 col-sm-2>
-        <h5>Loading Delegates</h5>
+        <h5>{{ 'LOADING_DELEGATES' | translate }}</h5>
       </ion-col>
       <ion-col col-12 col-sm-3>
       </ion-col>
@@ -86,3 +71,16 @@
   </ion-grid>
 
 </ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button (click)="voteGDT()" block >{{ 'VOTE_GDT' | translate }}</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button (click)="voteSelected()" block id="vote">{{ 'VOTE' | translate }}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

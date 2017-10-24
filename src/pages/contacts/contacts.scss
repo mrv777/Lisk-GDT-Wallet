@@ -9,4 +9,17 @@ page-contacts {
     .header button {
         font-size: 1.5em;
     }
+
+    label {
+    	font-size: 20px;
+    }
+
+    label .smallTxt {
+    	font-size: 16px;
+    	color: #777;
+    }
+
+    button.fab-md {
+    	background-color: #f57c00;
+    }
 }

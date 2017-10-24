@@ -9,19 +9,18 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>About</ion-title>
-    <ion-buttons end>
-      <button ion-button secondary (click)="logout()">
-        <ion-icon name="power"></ion-icon>
-      </button>
-    </ion-buttons>
+    <ion-title>{{ 'ABOUT' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-<h4>Lisk GDT Wallet created by <a (click)="openModal('send')">MrV</a></h4>
-<h5>Sponsored by <a href="https://liskgdt.net" target="_blank">GDT</a></h5>
-
-<h6>Currency conversions provided by Cryptocompare & Coinmarketcap</h6>
+  <p>{{ 'CREATED_BY' | translate }}</p> 
+  <h2>MrV</h2>
+  <p>{{ 'SPONSORED_BY' | translate }}</p> 
+  <h2><a href="https://liskgdt.net" target="_blank">GDT</a></h2>
+  <button ion-button id="donateButton" (click)="openModal('send')" block>{{ 'DONATE' | translate }}</button>
+  <p>{{ 'DESIGNED_BY' | translate }} JOÃO TERESO</p>
+  <p>{{ 'TRANSLATED_BY' | translate }} 5anity(nl), punkrock(de), sgdias(es), gr33ndrag0n(fr), vekexasia(it), bioly(pl), vi1son(ru)</p>
+  <p>{{ 'CONVERSIONS_BY' | translate }} Cryptocompare & Coinmarketcap</p>
 </ion-content>

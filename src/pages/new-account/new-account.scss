@@ -1,6 +1,33 @@
 page-new-account {
-	.qrcode img {
-		width: 50%;
-		margin: 0 -4% -4%-4%;
+	.scroll-content {
+		background-color: #5364d5;
+		color: white;
 	}
+
+	#closeButton {
+        background-color: #fff;
+        color: #5364d5;
+    }
+    
+    .item-md {
+    	border-radius: 2px;
+   		margin: 20px 0;
+    }
+
+    .item-checkbox {
+    	background-color: #5364d5;
+    	color: #fff;
+    }
+
+    .item.item-md .checkbox-md {
+    	margin: 9px 9px 9px 4px;
+    }
+
+    p, h4, h6 {
+    	text-align: center;
+    }
+
+    h4 {
+    	font-weight: bold;
+    }
 }

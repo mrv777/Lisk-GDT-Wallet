@@ -12,15 +12,19 @@ import { AccountDataProvider } from '../../providers/account-data/account-data';
 })
 export class FingerprintWizardPage {
   private loginForm : FormGroup;
-  loginType: string = "Account";
   password: string;
-  accountNum: number = 1;
+  savePassphrase: boolean = false;
+  accountName: string = "";
+  account: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public accountData: AccountDataProvider, private formBuilder: FormBuilder, private barcodeScanner: BarcodeScanner) {
   	this.loginForm = this.formBuilder.group({
-      passwordForm: ['', Validators.required],
+      accountForm: ['', Validators.required],
+      passwordForm: [''],
       typeForm: [''],
-      accountNumForm: ['']
+      accountNumForm: [''],
+      saveForm: [''],
+      accountNameForm: ['']
     });
   }
 
@@ -28,7 +32,15 @@ export class FingerprintWizardPage {
 
   }
 
-  openBarcodeScanner() {
+  openBarcodeScannerAccount() {
+    this.barcodeScanner.scan().then((barcodeData) => {
+      this.account = barcodeData['text'];
+    }, (err) => {
+        // An error occurred
+    });
+  }
+
+  openBarcodeScannerPassword() {
     this.barcodeScanner.scan().then((barcodeData) => {
       this.password = barcodeData['text'];
     }, (err) => {
@@ -37,7 +49,7 @@ export class FingerprintWizardPage {
   }
 
   saveLogin() {
-  	this.accountData.saveSavedPassword(this.password, this.accountNum-1, this.loginType);
+  	this.accountData.saveSavedPassword(this.password, this.account, this.accountName, this.savePassphrase);
   	this.closeModal();
   }
 

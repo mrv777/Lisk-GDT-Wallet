@@ -1,14 +1,30 @@
 <ion-menu [content]="content" persistent="true">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <ion-content>
+  <ion-content id="sideNav">
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+      <button menuClose ion-item (click)="logout()">
+        <ion-icon name="power"></ion-icon> {{ 'LOGOUT' | translate }}
+      </button>
+    </ion-list>
+    <ion-list no-lines>
+<!--       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        <ion-icon name="{{p.icon}}"></ion-icon> {{p.title}}
+      </button> -->
+
+      <button menuClose ion-item  (click)="openPage('Account')">
+        <ion-icon name="home"></ion-icon> {{ 'ACCOUNT' | translate }}
+      </button>
+      <button menuClose ion-item  (click)="openPage('Voting')">
+        <ion-icon name="thumbs-up"></ion-icon> {{ 'VOTING' | translate }}
+      </button>
+      <button menuClose ion-item  (click)="openPage('Contacts')">
+        <ion-icon name="contacts"></ion-icon> {{ 'CONTACTS' | translate }}
+      </button>
+      <button menuClose ion-item  (click)="openPage('Delegate')">
+        <ion-icon name="person"></ion-icon> {{ 'DELEGATE' | translate }}
+      </button>
+      <button menuClose ion-item  (click)="openPage('About')">
+        <ion-icon name="information-circle"></ion-icon> {{ 'ABOUT' | translate }}
       </button>
     </ion-list>
   </ion-content>

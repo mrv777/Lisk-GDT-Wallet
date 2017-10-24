@@ -37,8 +37,11 @@
 		</ion-item>
 		<ion-item *ngIf="wasAccountLogin">
 			<ion-label stacked color="primary">Passphrase</ion-label>
-			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="password" formControlName="passwordForm">
+			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="{{passwordType}}" formControlName="passwordForm">
 			</ion-input>
+
+			<button id="eyeIcon" ion-button clear color="dark" type="button" item-right (click)="togglePassword()"> <ion-icon *ngIf="passwordType == 'password'" name="eye"> </ion-icon><ion-icon *ngIf="passwordType == 'text'" name="eye-off"> </ion-icon> </button>
+			<button id="fingerIcon" *ngIf="fingerAvailable === true && !guest" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
 			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword('password')"> <ion-icon name="barcode"> </ion-icon> </button>
 		</ion-item>
 		<ion-item *ngIf="accountHasSecondPass">

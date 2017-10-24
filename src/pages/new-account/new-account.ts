@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 // import { Screenshot } from '@ionic-native/screenshot';
 
 import { AccountDataProvider } from '../../providers/account-data/account-data';
@@ -16,8 +16,10 @@ export class NewAccountPage {
   passphrase: string;
   accountID: string;
   saved: boolean = false;
+  accountName: string = '';
+  savePassphrase: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountData: AccountDataProvider, public viewCtrl: ViewController) {
   }
 
   ionViewDidLoad() {
@@ -65,6 +67,7 @@ export class NewAccountPage {
   // }
 
   closeModal() {
-    this.viewCtrl.dismiss(this.passphrase);
+  	this.accountData.saveSavedPassword(this.passphrase, this.accountID, this.accountName, this.savePassphrase);
+    this.viewCtrl.dismiss(this.accountID);
   }
 }

@@ -3,39 +3,34 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Delegate</ion-title>
-    <ion-buttons end>
-      <button ion-button secondary (click)="logout()">
-        <ion-icon name="power"></ion-icon>
-      </button>
-    </ion-buttons>
+    <ion-title>{{ 'DELEGATE' | translate }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-<h3 *ngIf="delegateInfo == null">Account is not a registered delegate.</h3>
-<h3 *ngIf="delegateInfo != null">Delegate name: {{delegateInfo['username']}}</h3>
+<h3 *ngIf="delegateInfo == null" style="text-align: center;">{{ 'ACCOUNT_NOT_DELEGATE' | translate }}</h3>
+<h3 *ngIf="delegateInfo != null">{{ 'DELEGATE_NAME' | translate }}: {{delegateInfo['username']}}</h3>
 <ion-grid *ngIf="delegateInfo != null">
   <ion-row>
     <ion-col>
-      Rank: {{delegateInfo['rank']}}
+      {{ 'RANK' | translate }}: {{delegateInfo['rank']}}
     </ion-col>
     <ion-col>
-      Approval: {{delegateInfo['approval']}}%
+      {{ 'APPROVAL' | translate }}: {{delegateInfo['approval']}}%
     </ion-col>
     <ion-col>
-      Votes: {{ delegateInfo['vote'] / 100000000 | number }}
+      {{ 'VOTES' | translate }}: {{ delegateInfo['vote'] / 100000000 | number }}
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
-      Productivity: {{delegateInfo['productivity']}}%
+      {{ 'UPTIME' | translate }}: {{delegateInfo['productivity']}}%
     </ion-col>
     <ion-col>
-      Produced Blocks: {{ delegateInfo['producedblocks'] | number }}
+      {{ 'PRODUCED_BLOCKS' | translate }}: {{ delegateInfo['producedblocks'] | number }}
     </ion-col>
     <ion-col>
-      Missed Blocks: {{ delegateInfo['missedblocks'] | number }}
+      {{ 'MISSED_BLOCKS' | translate }}: {{ delegateInfo['missedblocks'] | number }}
     </ion-col>
   </ion-row>
 </ion-grid>

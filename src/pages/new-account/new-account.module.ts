@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NewAccountPage } from './new-account';
-import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -9,7 +9,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
   ],
   imports: [
     IonicPageModule.forChild(NewAccountPage),
-    NgxQRCodeModule,
+    TranslateModule.forChild(),
   ],
   providers: [
   ]

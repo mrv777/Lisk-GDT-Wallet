@@ -1,0 +1,73 @@
+<ion-content>
+<ion-grid id="txTable">
+    <ion-row>
+      <ion-col col-2 col-sm-2>
+        <h5>{{ 'TIME' | translate }}</h5>
+      </ion-col>
+      <ion-col col-0 col-sm-4 class="hidden-xs">
+        <h5>{{ 'TX_ID' | translate }}</h5>
+      </ion-col>
+      <ion-col col-7 col-sm-4>
+        <h5>{{ 'FROM' | translate }} / {{ 'TO' | translate }}</h5>
+      </ion-col>
+      <ion-col col-3 col-sm-2>
+        <h5>{{ 'AMOUNT' | translate }}</h5>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transactions == null || (transactions != null && transactions.length == 0)">
+      <ion-col col-12 col-sm-2 *ngIf="transactions == null">
+        <h5>{{ 'LOADING_TXS' | translate }}</h5>
+      </ion-col>
+      <ion-col col-12 col-sm-2 *ngIf="transactions != null && transactions.length == 0">
+        <h5>{{ 'NO_TXS' | translate }}</h5>
+      </ion-col>
+      <ion-col col-12 col-sm-4>
+      </ion-col>
+      <ion-col col-12 col-sm-4>
+      </ion-col>
+      <ion-col col-12 col-sm-2>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let transaction of transactions | paginate: { id: 'txList',
+                                                      itemsPerPage: numToDisplay,
+                                                      currentPage: p,
+                                                      totalItems: total }">
+      <ion-col col-2 col-sm-2>
+        <a (click)="openModal('tx',transaction.id)">{{transaction.date | date:'M/d H:mm'}}</a>
+      </ion-col>
+      <ion-col col-0 col-sm-4 col-4 class="hidden-xs">
+        <a href="https://explorer.lisk.4miners.net/tx/{{transaction.id}}" target="_blank">{{transaction.id}}</a>
+      </ion-col>
+      <ion-col col-7 col-sm-4 *ngIf="transaction.recipientId != accountID && transaction.type == 0">    
+        <span *ngIf="contacts.indexOf(transaction.recipientId) != -1">{{contactNames[contacts.indexOf(transaction.recipientId)]}}</span> 
+        <span *ngIf="contacts.indexOf(transaction.recipientId) == -1">{{transaction.recipientId}} </span> 
+        <ion-icon *ngIf="contacts.indexOf(transaction.recipientId) === -1 && !guest" class="addContact" (click)="addNewContact(transaction.recipientId)" name="person-add"></ion-icon>
+      </ion-col>
+      <ion-col col-7 col-sm-4 *ngIf="transaction.senderId != accountID  && transaction.type == 0">
+        <span *ngIf="contacts.indexOf(transaction.senderId) != -1">{{contactNames[contacts.indexOf(transaction.senderId)]}}</span> 
+        <span *ngIf="contacts.indexOf(transaction.senderId) == -1">{{transaction.senderId}} </span> 
+        <ion-icon *ngIf="contacts.indexOf(transaction.senderId) === -1 && !guest" class="addContact" (click)="addNewContact(transaction.senderId)" name="person-add"></ion-icon>
+      </ion-col>
+      <ion-col col-7 col-sm-4 *ngIf="transaction.type != 0">
+        <span *ngIf="transaction.type == 1">Second Passphrase</span>
+        <span *ngIf="transaction.type == 2">Delegate Registration</span>
+        <span *ngIf="transaction.type == 3">Delegate Vote</span>
+        <span *ngIf="transaction.type != 3 && transaction.type != 2 && transaction.type != 1">{{transaction.type}}</span>
+      </ion-col>
+      <ion-col col-3 col-sm-2>
+        <span [ngClass]="{'danger' : (transaction.senderId == accountID && transaction.amount > 0), 'success':(transaction.recipientId == accountID && transaction.amount > 0)}">{{transaction.amount/100000000 | number : '1.0-8'}}</span> <span class="feeTxt" [ngClass]="{'danger' : (transaction.senderId == accountID)}">({{transaction.fee/100000000 | number : '1.0-8'}})</span>
+      </ion-col>
+    </ion-row>
+    <pagination-controls  id="txList"
+                      (pageChange)="pageChanged($event)"
+                      maxSize="7"
+                      directionLinks="true"
+                      autoHide="true"
+                      previousLabel="Back"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page">
+    </pagination-controls>
+  </ion-grid>
+</ion-content>

@@ -25,3 +25,17 @@
     	font-size: 1.3rem;
     }
 }
+
+.menu-inner .scroll-content, .menu-inner .scroll-content .item-md, .menu-inner .scroll-content .item-ios {
+	background-color: #3D4DB8;
+	color: rgba(255, 255, 255, 0.75);
+	font-size: 18px;
+}
+
+#sideNav ion-icon {
+	padding: 15px;
+}
+
+.disable-scroll .ion-page { //Fix for model from popover in iOS
+    pointer-events: auto;
+}

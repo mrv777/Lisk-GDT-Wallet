@@ -1,51 +1,45 @@
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Login Wizard</ion-title>
-  </ion-navbar>
+	<ion-toolbar>
+        <ion-buttons left>
+            <button ion-button clear icon-only (click)="closeModal()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>{{ 'IMPORT' | translate }}</ion-title>
+    </ion-toolbar>
 
 </ion-header>
 
 
 <ion-content padding>
-<form [formGroup]="loginForm">
+	<form [formGroup]="loginForm">
 		<ion-list>			
 			<ion-item>
-				<ion-label stacked color="primary">Type of login to save</ion-label>
-				<ion-select item-end [(ngModel)]="loginType" formControlName="typeForm">
-				    <ion-option value="Account">Account ID</ion-option>
-				    <ion-option value="Password">Passphrase</ion-option>
-				  </ion-select>
-			</ion-item>
-			<ion-item text-wrap *ngIf="loginType == 'Password'" style="color: red">
-				If your device gets stolen or lost, it is recommended to transfer your balances out of all accounts that have saved passphrases on the device.
-			</ion-item>
-			<ion-item>
-				<ion-label stacked color="primary">{{loginType}}</ion-label>
-				<ion-input [(ngModel)]="password" name="password" type="text" required formControlName="passwordForm" placeholder="{{loginType}}">
+				<ion-input [(ngModel)]="accountName" name="accountName" type="text" required formControlName="accountNameForm" placeholder="{{ 'CHOOSE_ACCOUNT_NAME' | translate }}">
 				</ion-input>
-				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
 			</ion-item>
 			<ion-item>
-				<ion-label color="primary">Account to save login to: </ion-label>
-				<ion-select [(ngModel)]="accountNum" formControlName="accountNumForm">
-				    <ion-option value="1">1</ion-option>
-				    <ion-option value="2">2</ion-option>
-				    <ion-option value="3">3</ion-option>
-				    <ion-option value="4">4</ion-option>
-				    <ion-option value="5">5</ion-option>
-				  </ion-select>
+				<ion-input [(ngModel)]="account" name="account" type="text" required formControlName="accountForm" placeholder="{{ 'ACCOUNT' | translate }}">
+				</ion-input>
+				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerAccount()"> <ion-icon name="barcode"> </ion-icon> </button>
+			</ion-item>
+			<ion-item>
+			    <ion-label>{{ 'SAVE_TO_DEVICE' | translate }}</ion-label>
+			    <ion-checkbox [(ngModel)]="savePassphrase" formControlName="saveForm"></ion-checkbox>
+			</ion-item>
+			<ion-item *ngIf="savePassphrase">
+				<ion-input [(ngModel)]="password" name="password" type="password" required formControlName="passwordForm" placeholder="{{ 'PASSPHRASE' | translate }}">
+				</ion-input>
+				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword()"> <ion-icon name="barcode"> </ion-icon> </button>
+			</ion-item>
+			<ion-item *ngIf="savePassphrase" text-wrap style="color: red">
+				If your device gets stolen or lost, it is recommended to transfer your balances out of all accounts that have saved passphrases on the device.
 			</ion-item>
 		</ion-list>
 
 		<ion-row responsive-sm>
 			<ion-col>
-				<button ion-button color="secondary" (click)="saveLogin()" type="submit" block>Save</button>
-			</ion-col>
-		</ion-row>
-		<ion-row responsive-sm>
-			<ion-col>
-				<button ion-button (click)="closeModal()" block >Close</button>
+				<button ion-button color="white" (click)="saveLogin()" type="submit" block>{{ 'SAVE' | translate }}</button>
 			</ion-col>
 		</ion-row>
 	</form>

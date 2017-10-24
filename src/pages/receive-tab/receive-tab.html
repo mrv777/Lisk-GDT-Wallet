@@ -1,0 +1,16 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+          <h6>{{ 'YOUR_ADDRESS' | translate }}</h6>
+          <h5 (click)="copyAccount()">{{accountID}} <ion-icon name="copy"></ion-icon></h5>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+      	<ngx-qrcode qrc-errorCorrectionLevel = "M" [qrc-value] = "accountID"></ngx-qrcode>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

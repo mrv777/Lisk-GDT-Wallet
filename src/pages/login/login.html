@@ -1,82 +1,90 @@
-<!--
-  Generated template for the LoginPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-content padding>
+<ion-content padding *ngIf="accounts == null || accounts.length == 0">
 	<div id="loginLogo">
 		<img id="headerLogo" src="assets/headerLogo.png" />
 	</div>
-	<form [formGroup]="loginForm">
-		<ion-list>			
-			<ion-item>
-				<ion-label stacked color="primary">{{loginLabel}}</ion-label>
-				<ion-icon name="lock"></ion-icon>
-				<ion-input [(ngModel)]="password" name="password" type="{{loginType}}" required formControlName="passwordForm" placeholder="{{loginLabel}}">
-				</ion-input>
-				
-				<button id="fingerIcon" *ngIf="fingerAvailable === true" ion-button clear color="dark" type="button" item-right (click)="openSelectAccount()"> <ion-icon name="finger-print"></ion-icon> </button>
-				<button id="pinIcon" *ngIf="fingerAvailable !== true && cordovaAvailable === true" ion-button clear color="dark" type="button" item-right (click)="openSelectAccount()"> <ion-icon name="grid"></ion-icon> </button>
-				<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner()"> <ion-icon name="barcode"> </ion-icon> </button>
-				
-				<button id="passwordButton" class="toggleButtons" [class.activeToggle]="passwordActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Password')"> <ion-icon name="key"> </ion-icon> </button>
-				<button id="accountButton" class="toggleButtons" [class.activeToggle]="accountActive" ion-button clear color="dark" type="button" item-right (click)="toggleLogin('Account')"> <ion-icon name="person"></ion-icon> </button>
-
-			</ion-item>
-			<ion-item *ngIf="fingerAvailable === true" style="display:none">			
-				<ion-label color="primary">Account to load for Fingerprint: </ion-label>
-				<ion-select #selectAccount (ionChange)="showFingerprint()" [(ngModel)]="accountNum" formControlName="accountNumForm">
-			    <ion-option value="1">1</ion-option>
-			    <ion-option value="2">2</ion-option>
-			    <ion-option value="3">3</ion-option>
-			    <ion-option value="4">4</ion-option>
-			    <ion-option value="5">5</ion-option>
-			  </ion-select>
-			</ion-item>
-			<ion-item *ngIf="fingerAvailable !== true" style="display:none">			
-				<ion-label color="primary">Account to load for Pin: </ion-label>
-				<ion-select #selectAccount (ionChange)="showPinDialog()" [(ngModel)]="accountNum" formControlName="accountNumForm">
-			    <ion-option value="1">1</ion-option>
-			    <ion-option value="2">2</ion-option>
-			    <ion-option value="3">3</ion-option>
-			    <ion-option value="4">4</ion-option>
-			    <ion-option value="5">5</ion-option>
-			  </ion-select>
-			</ion-item>
-		</ion-list>
-		{{message}}
-		<ion-row>
-			<ion-col>
-				<ion-label item-start stacked color="primary">Node</ion-label>
-				<ion-select item-start id="nodeSelect" [(ngModel)]="nodeSelect" (ionChange)='changeNode()' formControlName="nodeSelectForm">
-					<ion-option value="mainnet/">Mainnet</ion-option>
-					<ion-option value="testnet/">Testnet</ion-option>
-					<ion-option value="">Custom</ion-option>
-				</ion-select>
-			</ion-col>
-		</ion-row>
-		<ion-row [class.hide]="hideCustom">
-			<ion-input [(ngModel)]="node" name="node" type="text" formControlName="nodeForm" placeholder="URL:PORT of the custom node">
-			</ion-input>
-		</ion-row>
-
+	<ion-grid>
 		<ion-row responsive-sm>
 			<ion-col>
-				<button ion-button color="secondary" (click)="onLogin()" type="submit" block [disabled]="!loginForm.valid || disableLogin">Login</button>
+				<button ion-button id="importButton" (click)="openModal('fingerprint')" block >{{ 'IMPORT' | translate }}</button>
 			</ion-col>
 		</ion-row>
 		<ion-row responsive-sm>
-			<ion-col *ngIf="fingerAvailable === true">
-				<button ion-button (click)="openModal('fingerprint')" block >Fingerprint Wizard</button>
-			</ion-col>
-			<ion-col *ngIf="fingerAvailable === false">
-				<button ion-button (click)="openModal('fingerprint')" block >Pin Login Wizard</button>
-			</ion-col>
 			<ion-col>
-				<button ion-button (click)="openModal('newaccount')" block >Create New Account</button>
+				<button ion-button id="newAccountButton" (click)="openModal('newaccount')" block >{{ 'GENERATE' | translate }}</button>
 			</ion-col>
 		</ion-row>
-	</form>
+		<ion-row responsive-sm>
+			<ion-col id="guestLogin">
+				<a (click)="openModal('guest')">{{ 'GUEST_LOGIN' | translate }}</a>
+			</ion-col>
+		</ion-row>
+		<ion-row responsive-sm>
+			<ion-col id="offlineTx">
+				<a (click)="openModal('offlineTx')">{{ 'OFFLINE_TX' | translate }}</a>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
 
+	
+	<ion-fab left bottom #fab>
+	    <button ion-fab mini id="langFab"><ion-icon name="chatbubbles"></ion-icon></button>
+	    <ion-fab-list id="langFabList" side="top">
+	    	<button ion-fab (click)="setLanguage('es-ES',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Spanish (Spain)</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('ru',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Russian</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('pl',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Polish</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('it',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Italian</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('de',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>German</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('fr',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>French</ion-label></button>
+	      <button ion-fab (click)="setLanguage('en',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>English</ion-label></button>
+	      <button ion-fab (click)="setLanguage('nl',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Dutch</ion-label></button> 
+	    </ion-fab-list>
+	  </ion-fab>
+
+</ion-content>
+
+<ion-content *ngIf="accounts != null && accounts.length > 0">
+	<div id="loginLogo">
+		<img id="headerLogo" src="assets/headerLogo.png" />
+	</div>
+	<div id="loader" *ngIf="!accountsLoaded && !error">
+		<ion-spinner></ion-spinner>	<br />
+		{{ 'LOADING_ACCOUNTS' | translate }}
+	</div>
+	<div id="loader" *ngIf="!accountsLoaded && error">
+		{{error}} <br />
+		<button ion-button (click)="setBalances()">Retry</button>
+	</div>
+	<ion-list *ngIf="accountsLoaded">
+	  <button ion-item *ngFor="let account of accounts" (click)="onLogin(account.account)">
+	    <div *ngIf="account.name != 'undefined'">{{account.name}}
+	    <span class="accountBalance">{{account.balance/100000000 | number : '1.2-8' }} <span class="lskCurrency">LSK</span></span>
+	    <br />
+	    {{account.account}}</div>
+	    <div *ngIf="account.name == 'undefined'">{{account.account}}<span class="accountBalance">{{account.balance/100000000 | number : '1.2-8' }} <span class="lskCurrency">LSK</span></span></div>
+	  </button>  
+	</ion-list>
+
+	<ion-fab left bottom #fab>
+	    <button ion-fab mini id="langFab"><ion-icon name="chatbubbles"></ion-icon></button>
+	    <ion-fab-list id="langFabList" side="top">
+	    	<button ion-fab (click)="setLanguage('es-ES',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Spanish (Spain)</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('ru',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Russian</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('pl',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Polish</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('it',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Italian</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('de',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>German</ion-label></button>
+	    	<button ion-fab (click)="setLanguage('fr',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>French</ion-label></button>
+	      <button ion-fab (click)="setLanguage('en',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>English</ion-label></button>
+	      <button ion-fab (click)="setLanguage('nl',fab)"><ion-icon name="chatboxes"></ion-icon><ion-label>Dutch</ion-label></button> 
+	    </ion-fab-list>
+	  </ion-fab>
+
+	<ion-fab right bottom>
+    <button ion-fab id="mainFab"><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="openModal('newaccount')"><ion-icon name="add"></ion-icon><ion-label>{{ 'GENERATE' | translate }}</ion-label></button>
+      <button ion-fab (click)="openModal('fingerprint')"><ion-icon name="cloud-download"></ion-icon><ion-label>{{ 'IMPORT' | translate }}</ion-label></button>
+      <button ion-fab (click)="openModal('guest')"><ion-icon name="contact"></ion-icon><ion-label>{{ 'GUEST_LOGIN' | translate }}</ion-label></button>
+      <button ion-fab (click)="openModal('offlineTx')"><ion-icon name="git-network"></ion-icon><ion-label>{{ 'OFFLINE_TX' | translate }}</ion-label></button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

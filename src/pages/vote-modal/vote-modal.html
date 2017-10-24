@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Vote Delegates</ion-title>
+    <ion-title>{{ 'VOTE_DELEGATES' | translate }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -18,18 +18,21 @@
   <form>
 	<ion-list *ngIf="status != 1">
 		<ion-item>
-			<ion-label stacked color="primary">Votes</ion-label>
+			<ion-label stacked color="primary">{{ 'VOTES' | translate }}</ion-label>
 			<ion-textarea [(ngModel)]="delegatesVotedNames" name="delegatesVoted" disabled></ion-textarea>
 		</ion-item>
 		<ion-item *ngIf="wasAccountLogin">
-			<ion-label stacked color="primary">Passphrase</ion-label>
-			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="password">
+			<ion-label stacked color="primary">{{ 'PASSPHRASE' | translate }}</ion-label>
+			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="{{passwordType}}" placeholder="{{ 'PASSPHRASE' | translate }} (Required)">
 			</ion-input>
+
+			<button id="eyeIcon" ion-button clear color="dark" type="button" item-right (click)="togglePassword()"> <ion-icon *ngIf="passwordType == 'password'" name="eye"> </ion-icon><ion-icon *ngIf="passwordType == 'text'" name="eye-off"> </ion-icon> </button>
+			<button id="fingerIcon" *ngIf="fingerAvailable === true && !guest" ion-button clear color="dark" type="button" item-right (click)="showFingerprint()"> <ion-icon name="finger-print"></ion-icon> </button>
 			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScannerPassword('password')"> <ion-icon name="barcode"> </ion-icon> </button>
 		</ion-item>
 		<ion-item *ngIf="accountHasSecondPass">
-			<ion-label stacked color="primary">Second Passphrase</ion-label>
-			<ion-input [(ngModel)]="secondPass" [disabled]="disableVote" name="secondPass" type="password">
+			<ion-label stacked color="primary">{{ 'SECOND_PASS' | translate }}</ion-label>
+			<ion-input [(ngModel)]="secondPass" [disabled]="disableVote" name="secondPass" type="password" placeholder="{{ 'SECOND_PASS' | translate }} (Required)">
 			</ion-input>
 			<button id="qrIcon" ion-button clear color="dark" type="button" item-right (click)="openBarcodeScanner('second')"> <ion-icon name="barcode"> </ion-icon> </button>
 		</ion-item>
@@ -43,12 +46,12 @@
 
 	<ion-row responsive-sm>
 		<ion-col>
-			<button ion-button [disabled]="disableVote" (click)="sendVote()" type="submit" block>Vote</button>
+			<button ion-button [disabled]="disableVote" (click)="sendVote()" type="submit" block>{{ 'VOTE' | translate }}</button>
 		</ion-col>
     </ion-row>
     <ion-row responsive-sm>
       <ion-col>
-			<button ion-button [disabled]="disableClose" color="light" (click)="closeModal()" block>Close</button>
+			<button ion-button [disabled]="disableClose" color="light" (click)="closeModal()" block>{{ 'CLOSE' | translate }}</button>
 		</ion-col>
 	</ion-row>
   </form>

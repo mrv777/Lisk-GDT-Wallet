@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http'
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx'
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -13,14 +13,16 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class CurrenciesProvider {
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
     console.log('Hello CurrenciesProvider Provider');
   }
 
   getPrice(currency) : Observable<object> {
-	  return this.http.get(`https://min-api.cryptocompare.com/data/price?fsym=LSK&tsyms=${currency}`)
-	    .map((res:Response) => res.json())
-	    .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+	  // return this.http.get(`https://min-api.cryptocompare.com/data/price?fsym=LSK&tsyms=${currency}`)
+	  //   .map((res:Response) => res.json())
+	  //   .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+
+    return this.http.get(`https://min-api.cryptocompare.com/data/price?fsym=LSK&tsyms=${currency}`);
   }
 
 }

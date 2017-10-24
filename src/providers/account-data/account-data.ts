@@ -22,11 +22,11 @@ export class AccountDataProvider {
   KEY_PAIR;
   PUBLIC_KEY;
   NODE_URL;
-  SAVED_PASSWORD = ["","","","",""];
-  SAVED_PASSWORD_TYPE = ["","","","",""];
   PIN;
-  OPTIONS;
+  GUEST_LOGIN: boolean = false;
+  OPTIONS: object = { testnet: false };
   LOGIN_STORAGE: SecureStorageObject;
+  FINGER_SECRET: string = "something";
 
   constructor(
     public events: Events,
@@ -37,37 +37,50 @@ export class AccountDataProvider {
 
   }
 
-  init() {
-  	this.secureStorage.create('lisk_gdt_password')
+  init(): Promise<void> {
+    this.secureStorage.create('lisk_gdt_pin')
       .then((storage: SecureStorageObject) => {
-      	this.LOGIN_STORAGE = storage;
         storage.get(`pin`) // Get pin if it's saved
         .then(
           data => { this.PIN = data; },
-          error => console.log(error)
+          error => console.log('Pin Error: ' + error)
         );
-      	for (let i=0;i<5; i++) {
-      		storage.get(`password${i}`)
-	        .then(
-	          data => { this.SAVED_PASSWORD[i] = data; },
-	          error => console.log(error)
-	        );
-	        storage.get(`passwordType${i}`)
-	        .then(
-	          data => { this.SAVED_PASSWORD_TYPE[i] = data; },
-	          error => console.log(error)
-	        );
-      	}
+      });
+
+      this.SAVED_ACCOUNTS = []; //Initialize saved accounts to empty array before fetching them
+    return this.secureStorage.create('lisk_gdt_accounts')
+      .then((storageGDT: SecureStorageObject) => { 
+      	this.LOGIN_STORAGE = storageGDT;
+        return storageGDT.keys()
+          .then(
+            data => { 
+              let ssData = data;
+              var promises = [];
+              for (let i=0;i<ssData.length; i++) {
+                  promises.push(storageGDT.get(ssData[i]));
+              }
+              return Promise.all(promises)
+                .then((accountData) => {
+                    for (let i=0;i<ssData.length; i++) {
+                        let accountDataArray = accountData[i].split("||");
+                        this.SAVED_ACCOUNTS[i] = { account: ssData[i], name: accountDataArray[0], password: accountDataArray[1] };    
+                    }
+                })
+                .catch((e) => {
+                    // handle errors here
+                });
+            },
+            error => console.log('Accounts Error ' + error)
+          );
       });
   }
 
-  login(password: string, accountNum: number, loginType: string): void {
+  login(password: string, loginType: string): void {
     if (loginType == "Account") {
     	this.ACCOUNT_ID = password;
     	this.getAccount(this.ACCOUNT_ID).then((account) => { 
 		  	this.setPublicKey(account['account']['publicKey']);
 		  });
-	    this.storage.set(this.SAVED_ACCOUNTS, password);
 	    this.setAccountID(password);
     } else {
 	    this.PASSWORD = password;
@@ -76,7 +89,6 @@ export class AccountDataProvider {
 
 	    const accountID = lisk.crypto.getAddress(this.PUBLIC_KEY);
 	    this.ACCOUNT_ID = accountID;
-	    this.storage.set(this.SAVED_ACCOUNTS, accountID);
 	    this.setAccountID(accountID);
 	}
 
@@ -89,21 +101,76 @@ export class AccountDataProvider {
     this.events.publish('user:login');
   };
 
-  saveSavedPassword(password: string, accountNum: number, loginType: string) {
-    this.LOGIN_STORAGE.set(`password${accountNum}`, password)
-    .then(
-      data => { this.SAVED_PASSWORD[accountNum] = password; },
-      error => console.log(error)
-    );
-     this.LOGIN_STORAGE.set(`passwordType${accountNum}`, loginType)
-    .then(
-      data => { this.SAVED_PASSWORD_TYPE[accountNum] = loginType; },
-      error => console.log(error)
-    );
+  setGuestLogin() {
+    this.GUEST_LOGIN = true;
   }
 
-  getSavedPassword(accountNum: number): object {
-    return { password: this.SAVED_PASSWORD[accountNum], type: this.SAVED_PASSWORD_TYPE[accountNum] };
+  resetGuestLogin() {
+    this.GUEST_LOGIN = false;
+  }
+
+  isGuestLogin(): boolean {
+    return this.GUEST_LOGIN;
+  }
+
+
+  saveSavedPassword(password: string, account: string, accountName: string, save: boolean) {   
+    if (!save) {
+      password = "";
+    }
+
+    this.LOGIN_STORAGE.set(account, `${accountName}||${password}`)
+      .then(
+        data => { 
+          this.SAVED_ACCOUNTS.push({ account: account, name: accountName, password: password });
+        },
+        error => console.log(error)
+      );
+  }
+
+  removeSavedPssword(): Promise<void> {
+    const account = this.ACCOUNT_ID;
+    const name = this.getAccountName();
+    const index = this.SAVED_ACCOUNTS.findIndex(x => x['account']==account);
+
+    return this.LOGIN_STORAGE.set(account, `${name}||`)
+      .then(
+        data => { 
+          if (index !== -1) {
+            this.SAVED_ACCOUNTS[index]['password']='';
+          }
+        },
+        error => console.log(error)
+      );
+  }
+
+  removeCurrentAccount(): Promise<void> {
+    // let index = this.SAVED_ACCOUNTS.findIndex(x => x.account==this.ACCOUNT_ID);
+    // this.SAVED_ACCOUNTS.splice(index, 1);
+    return this.LOGIN_STORAGE.remove(this.ACCOUNT_ID)
+      .then(
+        data => { 
+          console.log(data);
+        },
+        error => console.log(error)
+      );
+  }
+
+  getSavedPassword(): string {
+    return this.SAVED_ACCOUNTS.filter(x => x.account === this.ACCOUNT_ID).map(x => x.password)[0]; 
+  }
+
+  hasSavedPassword(): boolean {
+    const pass = this.SAVED_ACCOUNTS.filter(x => x.account === this.ACCOUNT_ID).map(x => x.password)[0]; 
+    if (pass == null || pass == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  getSavedAccounts(): object[] {
+    return this.SAVED_ACCOUNTS;
   }
 
   checkPin(pin: string): boolean {
@@ -127,6 +194,7 @@ export class AccountDataProvider {
     this.PUBLIC_KEY = null;
     this.ACCOUNT_ID = null;
     this.KEY_PAIR = null;
+    this.resetGuestLogin();
     this.storage.remove('accountID');
     this.events.publish('user:logout');
   };
@@ -143,6 +211,26 @@ export class AccountDataProvider {
     this.ACCOUNT_ID = accountID;
   };
 
+  getAccountName(): string {
+    return this.SAVED_ACCOUNTS.filter(x => x.account == this.ACCOUNT_ID).map(x => x.name)[0]; 
+  }
+
+  editAccountName(name: string): Promise<void> {
+    const account = this.ACCOUNT_ID;
+    const password = this.getSavedPassword();
+    const index = this.SAVED_ACCOUNTS.findIndex(x => x['account']==account);
+
+    return this.LOGIN_STORAGE.set(account, `${name}||${password}`)
+      .then(
+        data => { 
+          if (index !== -1) {
+            this.SAVED_ACCOUNTS[index]['name']=name;
+          }
+        },
+        error => console.log(error)
+      );
+  }
+
   getAccountID(): string {
     return this.ACCOUNT_ID;
   };
@@ -154,7 +242,7 @@ export class AccountDataProvider {
   };
 
   getAccountTransactions(address: string, limit: number, offset: number): Promise<object[]> {
-	return new Promise(resolve => {
+	  return new Promise(resolve => {
 	    lisk.api(this.OPTIONS).listTransactions(address, limit, offset, resolve);
 	  });
   };
@@ -247,6 +335,16 @@ export class AccountDataProvider {
     });
   }
 
+  setLang(lang: string): void {
+    this.storage.set(`Language`, lang);
+  }
+
+  getLang(): Promise<string> {
+    return this.storage.get(`Language`).then((value) => {
+        return value;
+    });
+  }
+
   exportContacts(): Promise<string> {
   	return this.storage.get(`${this.ACCOUNT_ID}contacts`).then((value) => {
   		return this.file.writeFile(cordova.file.externalDataDirectory, `${this.ACCOUNT_ID}contacts.txt`, JSON.stringify(value), {replace: true})
@@ -297,6 +395,10 @@ export class AccountDataProvider {
     });
   }
 
+  getFingerSecret(): string {
+    return this.FINGER_SECRET;
+  }
+
   convertPasswordToAccount(password): string {
     const pKey = lisk.crypto.getKeys(password)['publicKey'];
 
@@ -325,16 +427,20 @@ export class AccountDataProvider {
   		password = this.PASSWORD;
   	}
   	if (this.HAS_SECOND_PASSWORD) {
-  		transaction = lisk.transaction.createTransaction(to, amountNum, password, secondPass);
+  		transaction = lisk.transaction.createTransaction(to, amountNum, password, secondPass, 20);
   	} else {
-  		transaction = lisk.transaction.createTransaction(to, amountNum, password, null);
+  		transaction = lisk.transaction.createTransaction(to, amountNum, password, null, 20);
   	}
   	console.log(transaction);
   	return this.broadcastTX(transaction);
   }
 
-  broadcastTX(tx: object): Promise<any>{
-  	let request = {
+  broadcastTX(tx: object, setBroadcastNode: boolean = false, broadcastNode: string = ''): Promise<any>{
+  	if (setBroadcastNode) {
+      this.setNode(broadcastNode);
+    }
+
+    let request = {
         requestMethod: 'POST',
         requestUrl: lisk.api(this.OPTIONS).getFullUrl() + '/peer/' + 'transactions',
         nethash: lisk.api(this.OPTIONS).nethash,

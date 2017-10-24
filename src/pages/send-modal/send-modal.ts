@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, NavParams, ViewController, Select } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 
 import * as Big from 'big.js';
 
@@ -34,8 +35,11 @@ export class SendModalPage {
   contacts: object[];
   wasAccountLogin: boolean;
   password: string;
+  fingerAvailable: boolean = false;
+  guest: boolean = false;
+  passwordType: string = 'password';
 
-  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public navParams: NavParams, public viewCtrl: ViewController, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder) {
+  constructor(public navCtrl: NavController, public accountData: AccountDataProvider, public navParams: NavParams, public viewCtrl: ViewController, private barcodeScanner: BarcodeScanner, private formBuilder: FormBuilder, private faio: FingerprintAIO) {
   	this.sendForm = this.formBuilder.group({
       recipientForm: ['', Validators.required],
       amountForm: ['', Validators.required],
@@ -55,6 +59,14 @@ export class SendModalPage {
   }
 
   ionViewDidLoad() {
+  	  this.guest = this.accountData.isGuestLogin();
+	  this.faio.isAvailable().then((available) => {
+	    if (available == 'OK' || available == 'Available') {
+	      this.fingerAvailable = true;
+	    } else {
+	      this.fingerAvailable = false;
+	    }
+	  });
     this.loadContacts();
   }
 
@@ -67,7 +79,7 @@ export class SendModalPage {
     if (this.wasAccountLogin){
     	password = this.password;
     }
-    this.accountData.sendLisk(this.recipient, convertedAmount, this.secondPass, password).then((result) => { console.log(result);
+    this.accountData.sendLisk(this.recipient, convertedAmount, this.secondPass, password).then((result) => {
   		if (result['success'] == false) {
   			this.resultTxt = result['message'];
   			this.disableSend = false;
@@ -102,6 +114,26 @@ export class SendModalPage {
     }, (err) => {
         // An error occurred
     });
+  }
+
+  togglePassword() {
+  	if (this.passwordType == 'password') {
+  		this.passwordType = 'text';
+  	} else {
+  		this.passwordType = 'password';
+  	}
+  }
+
+  showFingerprint() {
+    this.faio.show({
+      clientId: 'Lisk-GDT',
+      clientSecret: this.accountData.getFingerSecret(), //Only necessary for Android
+      disableBackup: false  //Only for Android(optional)
+    })
+    .then((result: any) => { 
+    	this.password = this.accountData.getSavedPassword();
+    })
+    .catch((error: any) => console.log(error));
   }
 
   openContacts() {

@@ -17,18 +17,19 @@
   <form>
 		<ion-list>
 			<ion-item>
-				<ion-label stacked color="primary">Name</ion-label>
+				<ion-label stacked color="primary">{{ 'NAME' | translate }}</ion-label>
 				<ion-input [(ngModel)]="name" name="recipient" type="text">
         </ion-input>
 			</ion-item>
     </ion-list>
     <ion-list>
 			<ion-item>
-				<ion-label stacked color="primary">Account</ion-label>
+				<ion-label stacked color="primary">{{ 'ACCOUNT' | translate }}</ion-label>
 				<ion-input [(ngModel)]="account" [disabled]="startingAccount != ''" name="account" type="text">
         </ion-input>
 			</ion-item>
     </ion-list>
+    {{message}}
     
 
     <ion-row responsive-sm>
@@ -36,7 +37,7 @@
 				<button ion-button color="primary" (click)="editContact()" block>{{buttonText}}</button>
 			</ion-col>
       <ion-col>
-				<button ion-button color="light" (click)="closeModal()" block>Close</button>
+				<button ion-button color="light" (click)="closeModal()" block>{{ 'CLOSE' | translate }}</button>
 			</ion-col>
 		</ion-row>
 	</form>

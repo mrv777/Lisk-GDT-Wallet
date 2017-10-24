@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, ToastController, IonicApp, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { TranslateService } from '@ngx-translate/core';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
@@ -9,6 +10,8 @@ import { VotingPage } from '../pages/voting/voting';
 import { ContactsPage } from '../pages/contacts/contacts';
 import { DelegatePage } from '../pages/delegate/delegate';
 import { AboutPage } from '../pages/about/about';
+
+import { AccountDataProvider } from '../providers/account-data/account-data';
 
 
 @Component({
@@ -19,21 +22,26 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any, icon: string}>;
 
   backButtonPressedOnceToExit: boolean = false;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, private menuCtrl: MenuController, private ionicApp: IonicApp, public splashScreen: SplashScreen, private toastCtrl: ToastController) {
+  constructor(public platform: Platform, public statusBar: StatusBar, private menuCtrl: MenuController, private ionicApp: IonicApp, public splashScreen: SplashScreen, private toastCtrl: ToastController, public accountData: AccountDataProvider, translate: TranslateService) {
     this.initializeApp();
 
+    translate.setDefaultLang('en');
+
+    // The language to use. ToDo: Should be changed to the user's locale.
+    //translate.use('it');
+
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Voting', component: VotingPage },
-      { title: 'Contacts', component: ContactsPage },
-      { title: 'Delegate', component: DelegatePage },
-      { title: 'About', component: AboutPage },
-    ];
+    // this.pages = [
+    //   { title: 'Account', component: HomePage, icon: 'home' },
+    //   { title: 'Voting', component: VotingPage, icon: 'thumbs-up' },
+    //   { title: 'Contacts', component: ContactsPage, icon: 'contacts' },
+    //   { title: 'My Delegate', component: DelegatePage, icon: 'person' },
+    //   { title: 'About', component: AboutPage, icon: 'information-circle' },
+    // ];
 
   }
 
@@ -94,8 +102,21 @@ export class MyApp {
   }
 
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.push(page.component);
+    if (page == 'Account'){
+      this.nav.push(HomePage);
+    } else if (page == 'Voting'){
+      this.nav.push(VotingPage);
+    } else if (page == 'Contacts'){
+      this.nav.push(ContactsPage);
+    } else if (page == 'Delegate'){
+      this.nav.push(DelegatePage);
+    } else if (page == 'About'){
+      this.nav.push(AboutPage);
+    }
+  }
+
+  logout() {
+    this.accountData.logout();
+    this.nav.setRoot(LoginPage);
   }
 }
