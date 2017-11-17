@@ -96,27 +96,32 @@ export class VoteModalPage {
   }
 
   sendVote() {
-  	if (this.password != null && this.password != '' && this.delegatesVotedNames != ['No Votes to Change']) {
-	  	this.disableVote = true;
-	  	let password = this.password;
-	  	this.accountData.voteDelegates(this.delegatesVoted, this.secondPass, password).then((result) => {
-	  		if (result['success'] == false) {
-	  			this.resultTxt = result['message'];
-	  			this.disableVote = false;
-	  			this.status = -1;
-	  		} else {
-	  			this.status = 1;
-	  			this.resultTxt = "Submitting vote(s), please wait";
-	  			this.disableClose = true;
-			    setTimeout( () => {
-			      this.closeModal(true);
-			 	}, 12000);
-	  		}
-		  });
-	 } else {
-	 	this.resultTxt = "Passphrase required";
-	 	this.status = -1;
-	 }
+    if (this.accountData.convertPasswordToAccount(this.password) == this.accountData.getAccountID()) {
+    	if (this.password != null && this.password != '' && this.delegatesVotedNames != ['No Votes to Change']) {
+  	  	this.disableVote = true;
+  	  	let password = this.password;
+  	  	this.accountData.voteDelegates(this.delegatesVoted, this.secondPass, password).then((result) => {
+  	  		if (result['success'] == false) {
+  	  			this.resultTxt = result['message'];
+  	  			this.disableVote = false;
+  	  			this.status = -1;
+  	  		} else {
+  	  			this.status = 1;
+  	  			this.resultTxt = "Submitting vote(s), please wait";
+  	  			this.disableClose = true;
+  			    setTimeout( () => {
+  			      this.closeModal(true);
+  			 	}, 12000);
+  	  		}
+  		  });
+  	 } else {
+  	 	this.resultTxt = "Passphrase required";
+  	 	this.status = -1;
+  	 }
+   } else {
+      this.resultTxt = "Incorrect Passphrase";
+      this.status = -1;
+    }
   }
 
   closeModal(success: boolean = false) {

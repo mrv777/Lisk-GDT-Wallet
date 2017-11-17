@@ -36,9 +36,9 @@ export class HomePage {
 
   price: number = 0;
   currency: string = 'USD';
-  currencies: string[] = ['BTC','ETH','USD','EUR','CNY'];
+  currencies: string[] = ['BTC','ETH','USD','EUR','CNY','AUD'];
   symbol: string = '$';
-  currencySymbols: string[] = ['฿','Ξ','$','€','¥'];
+  currencySymbols: string[] = ['฿','Ξ','$','€','¥','A$'];
 
   subscriptionAccount;
 

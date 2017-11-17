@@ -71,29 +71,34 @@ export class SendModalPage {
   }
 
   onSend() {
-  	this.disableSend = true;
-    let amountBig = new Big(this.amount);
-    let convertedAmount = new Big(amountBig.times(100000000));
-    this.resultTxt = `Attempting to send ${this.recipient} ${amountBig}LSK`;
-    let password;
-    if (this.wasAccountLogin){
-    	password = this.password;
+    if (this.accountData.convertPasswordToAccount(this.password) == this.accountData.getAccountID()) {
+    	this.disableSend = true;
+      let amountBig = new Big(this.amount);
+      let convertedAmount = new Big(amountBig.times(100000000));
+      this.resultTxt = `Attempting to send ${this.recipient} ${amountBig}LSK`;
+      let password;
+      if (this.wasAccountLogin){
+      	password = this.password;
+      }
+      this.accountData.sendLisk(this.recipient, convertedAmount, this.secondPass, password).then((result) => {
+    		if (result['success'] == false) {
+    			this.resultTxt = result['message'];
+    			this.disableSend = false;
+    			this.status = -1;
+    		} else {
+    			this.status = 1;
+    			this.resultTxt = "Sending Lisk, please wait";
+    			this.disableClose = true;
+  		    setTimeout( () => {
+  		      this.closeModal();
+  		 	}, 2000);
+    		}
+  	  });
+      this.status = 0;
+    } else {
+      this.resultTxt = "Incorrect Passphrase";
+      this.status = -1;
     }
-    this.accountData.sendLisk(this.recipient, convertedAmount, this.secondPass, password).then((result) => {
-  		if (result['success'] == false) {
-  			this.resultTxt = result['message'];
-  			this.disableSend = false;
-  			this.status = -1;
-  		} else {
-  			this.status = 1;
-  			this.resultTxt = "Sending Lisk, please wait";
-  			this.disableClose = true;
-		    setTimeout( () => {
-		      this.closeModal();
-		 	}, 2000);
-  		}
-	  });
-    this.status = 0;
   }
 
   openBarcodeScanner() {
