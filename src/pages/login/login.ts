@@ -101,15 +101,22 @@ export class LoginPage {
   setBalances() {
     this.error = null;
     this.accountData.getAccount(this.accounts[this.loopIndex]['account']).then((account) => {
-      if (account['error'] && account['error']['code'] == "EUNAVAILABLE") {
+      if (account['error']) {
         if (account['error']['code'] == "EUNAVAILABLE") {
           this.error = "Unable to connect to server"
         } else {
           this.error = account['message'];
+          this.accounts[this.loopIndex]['balance'] = 0;
+          if (this.loopIndex == this.accounts.length-1) {
+            this.accountsLoaded = true;
+          } else {
+            this.loopIndex = this.loopIndex + 1;
+            this.setBalances();
+          }
         }
       } else {
-        if (account && account['account'] && account['account']['balance']) {
-          this.accounts[this.loopIndex]['balance'] = account['account']['balance'];
+        if (account && account['data'] && account['data'][0] && account['data'][0]['balance']) {
+          this.accounts[this.loopIndex]['balance'] = account['data'][0]['balance'];
         } else {
           this.accounts[this.loopIndex]['balance'] = 0;
         }

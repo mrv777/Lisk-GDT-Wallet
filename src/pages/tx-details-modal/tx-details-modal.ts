@@ -26,8 +26,8 @@ export class TxDetailsModalPage {
 
   ionViewDidLoad() {
     this.accountData.getTransaction(this.txId).then((tx) => { console.log(tx);
-	  	this.tx = tx;
-	  	this.tx['transaction']['date'] = new Date((1464109200 + this.tx['transaction']['timestamp'])*1000);
+	  	this.tx = tx['data'][0];
+	  	this.tx['date'] = new Date((1464109200 + this.tx['timestamp'])*1000);
 	  });
     
   }

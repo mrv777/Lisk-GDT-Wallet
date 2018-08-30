@@ -21,6 +21,10 @@
 			<ion-label stacked color="primary">{{ 'VOTES' | translate }}</ion-label>
 			<ion-textarea [(ngModel)]="delegatesVotedNames" name="delegatesVoted" disabled></ion-textarea>
 		</ion-item>
+		<ion-item>
+			<ion-label stacked color="primary">{{ 'VOTES_REMOVED' | translate }}</ion-label>
+			<ion-textarea [(ngModel)]="delegatesRemovedNames" name="delegatesRemoved" disabled></ion-textarea>
+		</ion-item>
 		<ion-item *ngIf="wasAccountLogin">
 			<ion-label stacked color="primary">{{ 'PASSPHRASE' | translate }}</ion-label>
 			<ion-input [(ngModel)]="password" [disabled]="disableSend" name="password" type="{{passwordType}}" placeholder="{{ 'PASSPHRASE' | translate }} (Required)">

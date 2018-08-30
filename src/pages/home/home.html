@@ -22,10 +22,11 @@
               {{ currency | uppercase }}
             </ion-option>
           </ion-select></h5>
-          <h4 *ngIf="account.account != null"><b><span class="lighterText">LSK</span> {{account.account.balance/100000000 | number : '1.0-8'}}</b></h4>
-          <h4 *ngIf="account.account == null"><b><span class="lighterText">LSK</span> 0</b></h4>
-          <h6 *ngIf="account.account != null"> <span class="lighterText">{{symbol}}</span> {{account.account.balance/100000000 * price | number : '1.2-2'}} </h6>
-          <h6 *ngIf="account.account == null"> <span class="lighterText">{{symbol}}</span> 0 </h6>
+          <h4 *ngIf="account.data[0] != null"><b><span class="lighterText">LSK</span> {{account.data[0].balance/100000000 | number : '1.0-8'}}</b></h4>
+          <h4 *ngIf="account.data[0] == null"><b><span class="lighterText">LSK</span> 0</b></h4>
+          <h6 *ngIf="account.data[0] != null && change > 0"> <span class="lighterText">{{symbol}}</span> {{account.data[0].balance/100000000 * price | number : '1.2-2'}} <span class="change24 success">&uarr;{{change | number : '1.2-2'}}%</span></h6>
+          <h6 *ngIf="account.data[0] != null && change <= 0"> <span class="lighterText">{{symbol}}</span> {{account.data[0].balance/100000000 * price | number : '1.2-2'}} <span class="change24 danger">&darr;{{change | number : '1.2-2'}}%</span></h6>
+          <h6 *ngIf="account.data[0] == null"> <span class="lighterText">{{symbol}}</span> 0 </h6>
         </div>
       </ion-col>
     </ion-row>

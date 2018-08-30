@@ -23,8 +23,8 @@ export class DelegatePage {
 
   ionViewDidLoad() {
     this.accountData.getDelegate().then((delegateData) => { console.log(delegateData);
-	    if (delegateData['success'] == true) {
-	    	this.delegateInfo = delegateData['delegate'];
+	    if (delegateData['data'] && delegateData['data'][0]) {
+	    	this.delegateInfo = delegateData['data'][0];
 	    }
 	});
   }

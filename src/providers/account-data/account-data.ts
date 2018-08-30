@@ -4,9 +4,10 @@ import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage';
 import { File } from '@ionic-native/file';
+import lisk from 'lisk-elements';
 
-declare var require: any;
-const lisk = require('lisk-js');
+//declare var require: any;
+//const lisk = require('lisk-elements').default;
 
 declare var cordova: any;
 
@@ -19,7 +20,6 @@ export class AccountDataProvider {
   ACCOUNT;
   PASSWORD;
   HAS_SECOND_PASSWORD = false;
-  KEY_PAIR;
   PUBLIC_KEY;
   NODE_URL;
   PIN;
@@ -27,6 +27,7 @@ export class AccountDataProvider {
   OPTIONS: object = { testnet: false };
   LOGIN_STORAGE: SecureStorageObject;
   FINGER_SECRET: string = "something";
+  CLIENT = lisk.APIClient.createMainnetAPIClient();
 
   constructor(
     public events: Events,
@@ -79,21 +80,20 @@ export class AccountDataProvider {
     if (loginType == "Account") {
     	this.ACCOUNT_ID = password;
     	this.getAccount(this.ACCOUNT_ID).then((account) => { 
-		  	this.setPublicKey(account['account']['publicKey']);
+		  	this.setPublicKey(account['data'][0]['publicKey']);
 		  });
 	    this.setAccountID(password);
     } else {
 	    this.PASSWORD = password;
-	    this.KEY_PAIR = lisk.crypto.getKeys(password);
-	    this.PUBLIC_KEY = this.KEY_PAIR['publicKey'];
+	    const addressPk = lisk.cryptography.getAddressAndPublicKeyFromPassphrase(password);
+	    this.PUBLIC_KEY = addressPk['publicKey'];
 
-	    const accountID = lisk.crypto.getAddress(this.PUBLIC_KEY);
-	    this.ACCOUNT_ID = accountID;
-	    this.setAccountID(accountID);
+	    this.ACCOUNT_ID = addressPk['address']
+	    this.setAccountID(this.ACCOUNT_ID);
 	}
 
     this.getAccount().then((account) => {
-	  	if (account['account'] && account['account']['secondPublicKey'] != null){
+	  	if (account['data'][0] && account['data'][0]['secondPublicKey'] != null){
 	  		this.HAS_SECOND_PASSWORD = true;
 	  	}
 	  });
@@ -193,7 +193,6 @@ export class AccountDataProvider {
     this.PASSWORD = null;
     this.PUBLIC_KEY = null;
     this.ACCOUNT_ID = null;
-    this.KEY_PAIR = null;
     this.resetGuestLogin();
     this.storage.remove('accountID');
     this.events.publish('user:logout');
@@ -236,51 +235,74 @@ export class AccountDataProvider {
   };
 
   getAccount(accountID: string = this.ACCOUNT_ID): Promise<object[]> {
-  	return new Promise(resolve => {
-       lisk.api(this.OPTIONS).getAccount(accountID, resolve);
+  	return this.CLIENT.accounts.get({ address: accountID }).then(res => {
+      return res;
     });
+    // return new Promise(resolve => {
+    //    this.CLIENT.accounts.get({ address: accountID });
+    //    //lisk.api(this.OPTIONS).getAccount(accountID, resolve);
+    // });
   };
 
   getAccountTransactions(address: string, limit: number, offset: number): Promise<object[]> {
+	  return this.CLIENT.transactions.get({ senderIdOrRecipientId: address, limit: limit, offset: offset, sort: 'timestamp:desc' }).then(res => {
+      return res;
+    });
+   //  return new Promise(resolve => {
+	  //   lisk.api(this.OPTIONS).listTransactions(address, limit, offset, resolve);
+	  // });
+  };
+
+  getVotes(address: string): Promise<object[]> {
+    return this.CLIENT.votes.get({ address: address, limit: 101 }).then(res => {
+      return res;
+    });
+
+	  // return new Promise(resolve => {
+  	// 	lisk.api(this.OPTIONS).listVotes(address, resolve);
+  	// });
+  };
+
+  getActiveDelegates(amount: number): Promise<object[]> {
+    return this.CLIENT.delegates.get({ limit: amount }).then(res => {
+      return res;
+    });
+	// return new Promise(resolve => {
+ //  		lisk.api(this.OPTIONS).listActiveDelegates(amount, resolve);
+ //  	});
+  };
+
+  getStandbyDelegates(amount: number, offset: number): Promise<object[]> {
+	  return this.CLIENT.delegates.getStandby({ limit: amount, offset: offset }).then(res => {
+      return res;
+    });
+    // return new Promise(resolve => {
+  	// 	lisk.api(this.OPTIONS).listStandbyDelegates(amount, resolve);
+  	// });
+  };
+
+  sendRequest(request: string, parameters: object): Promise<object[]> {
 	  return new Promise(resolve => {
-	    lisk.api(this.OPTIONS).listTransactions(address, limit, offset, resolve);
-	  });
-  };
-
-  getVotes(address: string) {
-	return new Promise(resolve => {
-  		lisk.api(this.OPTIONS).listVotes(address, resolve);
-  	});
-  };
-
-  getActiveDelegates(amount: number) {
-	return new Promise(resolve => {
-  		lisk.api(this.OPTIONS).listActiveDelegates(amount, resolve);
-  	});
-  };
-
-  getStandbyDelegates(amount: number) {
-	return new Promise(resolve => {
-  		lisk.api(this.OPTIONS).listStandbyDelegates(amount, resolve);
-  	});
-  };
-
-  sendRequest(request: string, parameters: object) {
-	return new Promise(resolve => {
   		lisk.api(this.OPTIONS).sendRequest(request, parameters, resolve);
   	});
   };
 
-  searchDelegates(username: string) {
-	return new Promise(resolve => {
-  		lisk.api(this.OPTIONS).searchDelegateByUsername(username, resolve);
-  	});
+  searchDelegates(username: string): Promise<object[]> {
+    return this.CLIENT.delegates.get({ username: username }).then(res => {
+      return res;
+    });
+	// return new Promise(resolve => {
+ //  		lisk.api(this.OPTIONS).searchDelegateByUsername(username, resolve);
+ //  	});
   };
 
-  getTransaction(tx: string) {
-  	return new Promise(resolve => { console.log(tx);
-  		lisk.api(this.OPTIONS).getTransaction(tx, resolve);
-  	});
+  getTransaction(tx: string): Promise<object[]> {
+    return this.CLIENT.transactions.get({ id: tx }).then(res => {
+      return res;
+    });
+  	// return new Promise(resolve => { console.log(tx);
+  	// 	lisk.api(this.OPTIONS).getTransaction(tx, resolve);
+  	// });
   }
 
   hasLoggedIn(): boolean {
@@ -360,19 +382,21 @@ export class AccountDataProvider {
 
   importContacts(uri: string): Promise<string> { console.log(uri);
   	let n = uri.lastIndexOf('/');
-	let path = uri.substring(0, n);
-	let file = uri.substring(n + 1);
-	return this.file.readAsText(path, file).then((text) => {
-		return text;
-	});
+  	let path = uri.substring(0, n);
+  	let file = uri.substring(n + 1);
+  	return this.file.readAsText(path, file).then((text) => {
+  		return text;
+  	});
   }
 
   setNode(node: string): Promise<void> {
     if (node == 'mainnet/') {
-    	this.OPTIONS = { testnet: false };
+    	//this.OPTIONS = { testnet: false };
+      this.CLIENT = lisk.APIClient.createMainnetAPIClient();
     } else if (node == 'testnet/') {
     	// this.OPTIONS = { testnet: true };
-    	this.OPTIONS = { ssl: true, node: 'testnet.lisk.io', port: '443', testnet: true, randomPeer: false };
+    	//this.OPTIONS = { ssl: true, node: 'testnet.lisk.io', port: '443', testnet: true, randomPeer: false };
+      this.CLIENT = lisk.APIClient.createTestnetAPIClient();
     } else {
     	let url;
     	let port;
@@ -400,21 +424,23 @@ export class AccountDataProvider {
   }
 
   convertPasswordToAccount(password): string {
-    const pKey = lisk.crypto.getKeys(password)['publicKey'];
+   //const pKey = lisk.crypto.getKeys(password)['publicKey'];
 
-    const accountID = lisk.crypto.getAddress(pKey);
-    return accountID;
+    //const accountID = lisk.crypto.getAddress(pKey);
+    return lisk.cryptography.getAddressFromPassphrase(password);
   }
 
-  voteDelegates(delegates: string[], secondPass: string = null, password: string = this.PASSWORD): Promise<any> {
+  voteDelegates(delegates: string[], removed: string[], secondPass: string = null, password: string = this.PASSWORD): Promise<any> {
   	let transaction;
   	if (password == null){
   		password = this.PASSWORD;
-  	}
+  	}console.log(delegates);
   	if (this.HAS_SECOND_PASSWORD) {
-  		transaction = lisk.vote.createVote(password, delegates, secondPass, 20);
+      transaction = lisk.transaction.castVotes({ votes: delegates, unvotes: removed, passphrase: password, secondPassphrase: secondPass });
+  		//transaction = lisk.vote.createVote(password, delegates, secondPass, 20);
   	} else {
-  		transaction = lisk.vote.createVote(password, delegates, null, 20);	
+      transaction = lisk.transaction.castVotes({ votes: delegates, unvotes: removed, passphrase: password });
+  		//transaction = lisk.vote.createVote(password, delegates, null, 20);	
   	}
   	console.log(transaction);
   	return this.broadcastTX(transaction);
@@ -427,9 +453,11 @@ export class AccountDataProvider {
   		password = this.PASSWORD;
   	}
   	if (this.HAS_SECOND_PASSWORD) {
-  		transaction = lisk.transaction.createTransaction(to, amountNum, password, secondPass, 20);
+      transaction = lisk.transaction.transfer({ amount: amountNum, recipientId: to, passphrase: password, secondPassphrase: secondPass });
+  		//transaction = lisk.transaction.createTransaction(to, amountNum, password, secondPass, 20);
   	} else {
-  		transaction = lisk.transaction.createTransaction(to, amountNum, password, null, 20);
+  		transaction = lisk.transaction.transfer({ amount: amountNum, recipientId: to, passphrase: password });
+      //transaction = lisk.transaction.createTransaction(to, amountNum, password, null, 20);
   	}
   	console.log(transaction);
   	return this.broadcastTX(transaction);
@@ -440,31 +468,41 @@ export class AccountDataProvider {
       this.setNode(broadcastNode);
     }
 
-    let request = {
-        requestMethod: 'POST',
-        requestUrl: lisk.api(this.OPTIONS).getFullUrl() + '/peer/' + 'transactions',
-        nethash: lisk.api(this.OPTIONS).nethash,
-        requestParams: { transaction: tx }
-    };
+    // let request = {
+    //     requestMethod: 'POST',
+    //     requestUrl: lisk.api(this.OPTIONS).getFullUrl() + '/peer/' + 'transactions',
+    //     nethash: lisk.api(this.OPTIONS).nethash,
+    //     requestParams: { transaction: tx }
+    // };
 
-    return lisk.api(this.OPTIONS).doPopsicleRequest(request).then(function (result) {
-        return result['body'];
-    });
+    return this.CLIENT.transactions.broadcast(tx).then(res => {
+      return res;
+    })
+    .catch((error:any) => console.log(error));
+
+    // return lisk.api(this.OPTIONS).doPopsicleRequest(request).then(function (result) {
+    //     return result['body'];
+    // });
 
   }
 
   getDelegate(pKey: string = this.PUBLIC_KEY): Promise<any>{
-  	let request = {
-        requestMethod: 'GET',
-        requestUrl: lisk.api(this.OPTIONS).getFullUrl() + '/api/' + `delegates/get?publicKey=${pKey}`,
-    };
+  	// let request = {
+   //      requestMethod: 'GET',
+   //      requestUrl: lisk.api(this.OPTIONS).getFullUrl() + '/api/' + `delegates/get?publicKey=${pKey}`,
+   //  };
 
-    return lisk.api(this.OPTIONS).doPopsicleRequest(request).then(function (result) {
-        return result['body'];
-    });
+   //  return lisk.api(this.OPTIONS).doPopsicleRequest(request).then(function (result) {
+   //      return result['body'];
+   //  });
+
+   return this.CLIENT.delegates.get({ publicKey: pKey }).then(res => {
+      return res;
+    })
+    .catch((error:any) => console.log(error)); 
   }
 
   signTransaction(unsignedTransactionBytes: string): string  {
-    return lisk.crypto.sign(unsignedTransactionBytes, this.KEY_PAIR);
+    return lisk.transaction.utils.signTransaction(unsignedTransactionBytes, this.PASSWORD);
   }
 }

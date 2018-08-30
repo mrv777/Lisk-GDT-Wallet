@@ -47,6 +47,7 @@
 		<img id="headerLogo" src="assets/headerLogo.png" />
 	</div>
 	<div id="loader" *ngIf="!accountsLoaded && !error">
+		{{error}} <br />
 		<ion-spinner></ion-spinner>	<br />
 		{{ 'LOADING_ACCOUNTS' | translate }}
 	</div>

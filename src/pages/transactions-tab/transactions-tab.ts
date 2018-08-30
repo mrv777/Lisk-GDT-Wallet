@@ -70,23 +70,23 @@ export class TransactionsTabPage {
 	  	this.account = account;
 	  });
   	this.accountData.getAccountTransactions(this.accountID, this.numToDisplay, (this.numToDisplay * (this.p-1))).then((transactions) => {
-	  	this.transactions = transactions['transactions'];
-	  	if (transactions['transactions'][0] && transactions['transactions'][0]['id']) {
+	  	this.transactions = transactions['data'];
+	  	if (transactions['data'][0] && transactions['data'][0]['id']) {
 	  		this.recentTxId = this.transactions[0]['id']; // Record the most recent TX id
 	  	}
-	  	this.total = transactions['count'];
+	  	this.total = transactions['meta']['count'];
 	  	for (let i=0;i < this.transactions.length; i++) {
 	      this.transactions[i]['date'] = new Date((1464109200 + this.transactions[i]['timestamp'])*1000);
 	    } 
 	  	this.transactionsCount = transactions['count'];
 	  	clearInterval(this.subscriptionTx);
-	  	this.subscriptionTx = setInterval(() => { this.loadRecentTX(); }, 3000);
+	  	this.subscriptionTx = setInterval(() => { this.loadRecentTX(); }, 4000);
 	  });
   }
 
   loadRecentTX() {
   	this.accountData.getAccountTransactions(this.accountID, 1, this.numToDisplay * (this.p-1)).then((transactions) => {
-  		if (transactions['transactions'][0] && transactions['transactions'][0]['id'] && transactions['transactions'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
+  		if (transactions['data'][0] && transactions['data'][0]['id'] && transactions['data'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
   			this.loadTxs();
   		}
   	});
@@ -124,8 +124,9 @@ export class TransactionsTabPage {
   	console.log(event);
   }
 
-  ionViewDidLeave() { 
+  ionViewWillLeave() { 
   	clearInterval(this.subscriptionTx);
+    this.subscriptionTx = null;
   }
 
 }

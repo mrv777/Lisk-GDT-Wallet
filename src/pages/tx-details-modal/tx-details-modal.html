@@ -20,7 +20,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid *ngIf="tx != null && tx['success'] != true">
+  <ion-grid *ngIf="tx != null && !tx['timestamp']">
     <ion-row>
       <ion-col col-12>
         <h5>{{ 'LOADING_ERROR' | translate }}</h5>
@@ -28,13 +28,13 @@
     </ion-row>
   </ion-grid>
 
-  <ion-grid *ngIf="tx != null && tx['success'] == true">
+  <ion-grid *ngIf="tx != null && tx['timestamp']">
     <ion-row>
       <ion-col col-4>
       	{{ 'FROM' | translate }}:
       </ion-col>
       <ion-col col-8>
-      	<a target="_blank" href="https://explorer.lisk.io/address/{{ tx['transaction']['senderId'] }}">{{tx['transaction']['senderId']}}</a>
+      	<a target="_blank" href="https://explorer.lisk.io/address/{{ tx['senderId'] }}">{{tx['senderId']}}</a>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -42,7 +42,7 @@
       	{{ 'TO' | translate }}:
       </ion-col>
       <ion-col col-8>
-      	<a target="_blank" href="https://explorer.lisk.io/address/{{ tx['transaction']['recipientId'] }}">{{tx['transaction']['recipientId']}}</a>
+      	<a target="_blank" href="https://explorer.lisk.io/address/{{ tx['recipientId'] }}">{{tx['recipientId']}}</a>
       </ion-col>
     </ion-row>
 
@@ -51,7 +51,7 @@
       	{{ 'AMOUNT' | translate }}: 
       </ion-col>
       <ion-col col-8>
-      	{{tx['transaction']['amount']/100000000 | number : '1.0-8'}}
+      	{{tx['amount']/100000000 | number : '1.0-8'}}
       </ion-col>
     </ion-row>
 
@@ -60,7 +60,7 @@
       	{{ 'FEE' | translate }}: 
       </ion-col>
       <ion-col col-8>
-      	{{tx['transaction']['fee']/100000000 | number : '1.0-8'}}	
+      	{{tx['fee']/100000000 | number : '1.0-8'}}	
       </ion-col>
     </ion-row>
 
@@ -69,7 +69,7 @@
       	{{ 'DATE' | translate }}:
       </ion-col>
       <ion-col col-8>
-      	{{tx['transaction']['date'] | date:'short'}}
+      	{{tx['date'] | date:'short'}}
       </ion-col>
     </ion-row>
 
@@ -78,7 +78,7 @@
       	{{ 'BLOCK' | translate }}: 
       </ion-col>
       <ion-col col-8>
-      	{{tx['transaction']['blockId']}}
+      	{{tx['blockId']}}
       </ion-col>
     </ion-row>  
     <ion-row>
@@ -86,7 +86,7 @@
       	{{ 'HEIGHT' | translate }}: 
       </ion-col>
       <ion-col col-8>
-      	{{tx['transaction']['height']}}
+      	{{tx['height']}}
       </ion-col>
     </ion-row>
     <ion-row>
@@ -94,7 +94,7 @@
       	{{ 'CONFIRMATIONS' | translate }}: 
       </ion-col>
       <ion-col col-8>
-      	{{tx['transaction']['confirmations']}}
+      	{{tx['confirmations']}}
       </ion-col>
     </ion-row>
     <ion-row>

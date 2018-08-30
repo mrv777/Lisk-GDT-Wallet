@@ -42,7 +42,7 @@ export class SendTabPage {
       this.recipient = navParams.get('address');
     }
     this.accountData.getAccount().then((account) => {
-	  	if (account['account'] && account['account']['secondPublicKey'] != null){
+	  	if (account['data'] && account['data'][0] && account['data'][0]['secondPublicKey'] != null){
 	  		this.accountHasSecondPass = true;
 	  	}
 	  });

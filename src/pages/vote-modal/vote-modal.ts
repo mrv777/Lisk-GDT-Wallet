@@ -21,6 +21,8 @@ export class VoteModalPage {
   disableVote: boolean = false;
   delegatesVoted: string[];
   delegatesVotedNames: string[];
+  delegatesRemoved: string[];
+  delegatesRemovedNames: string[];
   accountHasSecondPass: boolean = false;
   disableClose: boolean = false;
   secondPass: string;
@@ -33,20 +35,22 @@ export class VoteModalPage {
   passwordType: string = 'password';
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, public accountData: AccountDataProvider, private barcodeScanner: BarcodeScanner, private faio: FingerprintAIO) {
-  	if (navParams.get('delegates')) {
-      this.delegatesVoted = navParams.get('delegates');
-      this.delegatesVotedNames = navParams.get('names');
+  	if (navParams.get('newDelegates')) {
+      this.delegatesVoted = navParams.get('newDelegates');
+      this.delegatesVotedNames = navParams.get('newNames');
+      this.delegatesRemoved = navParams.get('removeDelegates');
+      this.delegatesRemovedNames = navParams.get('removeNames');
 
-      if (this.delegatesVotedNames.length == 0) {
+      if (this.delegatesVotedNames.length == 0 && this.delegatesRemovedNames.length == 0) {
       	this.delegatesVotedNames = ['No Votes to Change'];
       }
     }
 	
-	this.accountData.getAccount().then((account) => {
-	  	if (account['account']['secondPublicKey'] != null){
-	  		this.accountHasSecondPass = true;
-	  	}
-	  });
+  this.accountData.getAccount().then((account) => {
+      if (account['data'] && account['data'][0] && account['data'][0]['secondPublicKey'] != null){
+        this.accountHasSecondPass = true;
+      }
+    });
 
 	this.wasAccountLogin = this.accountData.wasAccountLogin();
     
@@ -100,7 +104,7 @@ export class VoteModalPage {
     	if (this.password != null && this.password != '' && this.delegatesVotedNames != ['No Votes to Change']) {
   	  	this.disableVote = true;
   	  	let password = this.password;
-  	  	this.accountData.voteDelegates(this.delegatesVoted, this.secondPass, password).then((result) => {
+  	  	this.accountData.voteDelegates(this.delegatesVoted, this.delegatesRemoved, this.secondPass, password).then((result) => {
   	  		if (result['success'] == false) {
   	  			this.resultTxt = result['message'];
   	  			this.disableVote = false;

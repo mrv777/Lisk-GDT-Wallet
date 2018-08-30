@@ -35,6 +35,7 @@ export class HomePage {
   receiveSelected: boolean = false;
 
   price: number = 0;
+  change: number = 0;
   currency: string = 'USD';
   currencies: string[] = ['BTC','ETH','USD','EUR','CNY','AUD'];
   symbol: string = '$';
@@ -93,17 +94,17 @@ export class HomePage {
   	this.accountData.getAccount(this.accountID).then((account) => {
 	  	this.account = account;
 	  	clearInterval(this.subscriptionAccount);
-	  	this.subscriptionAccount = setInterval(() => { this.loadRecentTX(); }, 3000);
+	  	this.subscriptionAccount = setInterval(() => { this.loadRecentTX(); }, 9000);
 	  });
   }
 
   loadRecentTX() {
   	this.accountData.getAccountTransactions(this.accountID, 1, 0).then((transactions) => {
-  		if (transactions['transactions'][0] && transactions['transactions'][0]['id'] && transactions['transactions'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
+  		if (transactions['data'][0] && transactions['data'][0]['id'] && transactions['data'][0]['id'] != this.recentTxId) { // Only reload everything if there was a recent TX (Balance will go off for forging accounts)
   			this.loadBalance();
   		}
-  		if (transactions['transactions'][0] && transactions['transactions'][0]['id']) {
-  			this.recentTxId = transactions['transactions'][0]['id'];
+  		if (transactions['data'][0] && transactions['data'][0]['id']) {
+  			this.recentTxId = transactions['data'][0]['id'];
   		}
   	});
   }
@@ -132,17 +133,26 @@ export class HomePage {
       	if (price != null && price[`${this.currency}`] != null) {
       		this.price = price[`${this.currency}`];
       	}
+        if (price != null && price['RAW'] && price['RAW']['LSK'] && price['RAW']['LSK'][`${this.currency}`] != null) {
+          this.price = price['RAW']['LSK'][`${this.currency}`]['PRICE'];
+          this.change = price['RAW']['LSK'][`${this.currency}`]['CHANGEPCT24HOUR'];
+        }
       },
       err => { console.log(err); });
   }
 
   logout() {
+    this.openPage(this.receivePage);
+    clearInterval(this.subscriptionAccount);
+    this.subscriptionAccount = null;
     this.accountData.logout();
     this.navCtrl.setRoot(LoginPage);
   }
 
-  ionViewDidLeave() { 
+  ionViewWillLeave() { 
+    this.openPage(this.receivePage);
   	clearInterval(this.subscriptionAccount);
+    this.subscriptionAccount = null;
   }
 
 }

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="mrv.liskgdt.wallet" version="1.1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="mrv.liskgdt.wallet" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Lisk GDT Wallet</name>
     <description>A mobile Lisk Wallet sponsored by the GDT.</description>
     <author email="mrv.crypto@gmail.com" href="">MrV</author>
@@ -79,24 +79,23 @@
         <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
-    <allow-navigation href="http://10.1.17.252:8100" />
-    <engine name="android" spec="^6.2.3" />
-    <engine name="ios" spec="^4.5.2" />
-    <plugin name="com.darktalker.cordova.screenshot" spec="^0.1.6" />
-    <plugin name="cordova-clipboard" spec="^1.1.0" />
-    <plugin name="cordova-plugin-console" spec="^1.1.0" />
-    <plugin name="cordova-plugin-device" spec="^1.1.6" />
-    <plugin name="cordova-plugin-file" spec="^4.3.3" />
-    <plugin name="cordova-plugin-filechooser" spec="^1.0.1" />
-    <plugin name="cordova-plugin-fingerprint-aio" spec="^1.3.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^1.1.15" />
-    <plugin name="cordova-plugin-pin-dialog" spec="~0.1.3" />
     <plugin name="cordova-plugin-secure-storage" spec="^2.6.8" />
-    <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
-    <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.8">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="Camera used to scan QR codes" />
+    <plugin name="com.darktalker.cordova.screenshot" spec="^0.1.6" />
+    <plugin name="cordova-plugin-filechooser" spec="^1.0.1" />
+    <plugin name="cordova-plugin-pin-dialog" spec="~0.1.3" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="^7.1.2" />
+    <plugin name="cordova-plugin-fingerprint-aio" spec="^1.3.7">
+        <variable name="FACEID_USAGE_DESCRIPTION" value=" " />
     </plugin>
+    <plugin name="cordova-plugin-console" spec="^1.1.0" />
+    <plugin name="cordova-plugin-device" spec="^2.0.2" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-clipboard" spec="^1.2.1" />
+    <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^1.2.1" />
+    <engine name="ios" spec="^4.5.4" />
+    <engine name="android" spec="~7.0.0" />
 </widget>

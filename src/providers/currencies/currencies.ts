@@ -22,7 +22,7 @@ export class CurrenciesProvider {
 	  //   .map((res:Response) => res.json())
 	  //   .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 
-    return this.http.get(`https://min-api.cryptocompare.com/data/price?fsym=LSK&tsyms=${currency}`);
+    return this.http.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=LSK&tsyms=${currency}`);
   }
 
 }
